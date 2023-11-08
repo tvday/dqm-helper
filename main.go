@@ -1,10 +1,10 @@
 package main
 
 import (
-	"backend/pkg/handlers"
-	"backend/pkg/listing"
 	"database/sql"
 	"fmt"
+	"github.com/tvday/dqm-helper/pkg/handlers"
+	"github.com/tvday/dqm-helper/pkg/listing"
 	"log"
 	"net/http"
 
@@ -35,26 +35,9 @@ func main() {
 	defer db.Close()
 	CheckError(db.Ping())
 
-	handler := handlers.NewHandler(db, listing.NewService(db))
+	lister := *listing.NewService(db)
 
-	router := gin.Default()
-
-	router.GET("/", homePage)
-
-	group := router.Group("api/v1")
-	{
-		group.GET("/monsters", handler.GetMonsters)
-		group.GET("/monsters/:name", handler.GetMonster)
-
-		group.GET("/skills", handler.GetSkills)
-		group.GET("/skills/:name", handler.GetSkill)
-
-		group.GET("/traits", handler.GetTraits)
-		group.GET("/traits/:name", handler.GetTrait)
-
-		group.GET("/talents", handler.GetTalents)
-		group.GET("/talents/:name", handler.GetTalent)
-	}
+	router := handlers.Handler(lister)
 
 	log.Fatal(router.Run(fmt.Sprintf(":%v", 8080)))
 

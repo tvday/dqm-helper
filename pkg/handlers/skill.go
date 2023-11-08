@@ -2,27 +2,33 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tvday/dqm-helper/pkg/listing"
+	"github.com/tvday/dqm-helper/pkg/models"
 	"net/http"
 )
 
-func (h *Handler) GetSkills(c *gin.Context) {
-	skills, err := h.service.GetSkills()
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+func getSkills(s listing.Service) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		skills, err := s.GetSkills()
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
-	c.IndentedJSON(http.StatusOK, skills)
+		c.IndentedJSON(http.StatusOK, skills)
+	}
 }
 
-func (h *Handler) GetSkill(c *gin.Context) {
-	skill, err := h.service.GetSkillBySlug(c.Param("name"))
+func getSkill(s listing.Service) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		skill, err := s.QuerySkill(models.Skill{Slug: c.Param("name")})
 
-	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		//c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
-		return
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			//c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+			return
+		}
+
+		c.IndentedJSON(http.StatusOK, skill)
 	}
-
-	c.IndentedJSON(http.StatusOK, gin.H{"data": skill})
 }

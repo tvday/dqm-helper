@@ -1,4 +1,4 @@
-package listing
+package adding
 
 import (
 	"database/sql"
@@ -11,12 +11,3 @@ type Service struct {
 func NewService(db *sql.DB) *Service {
 	return &Service{db: db}
 }
-
-type searchPredicate int
-
-const (
-	pID searchPredicate = iota
-	pNAME
-	pSLUG
-	pENTRYNO
-)
