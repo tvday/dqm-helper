@@ -6,6 +6,11 @@ import (
 	"github.com/tvday/dqm-helper/pkg/models"
 )
 
+type SkillInput struct {
+	models.Skill
+	Name string `json:"name" binding:"required"`
+}
+
 // AddSkill queries the repository to add a new skill (name, description, mp cost).
 // If data does not contain a unique name an error will be returned.
 // Returns the data of the added row: name, id, description, mp cost, and slug.

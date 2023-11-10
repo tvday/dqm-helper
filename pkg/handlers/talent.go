@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tvday/dqm-helper/pkg/adding"
 	"github.com/tvday/dqm-helper/pkg/listing"
 	"github.com/tvday/dqm-helper/pkg/models"
 	"net/http"
@@ -30,5 +31,17 @@ func getTalent(s listing.Service) func(c *gin.Context) {
 		}
 
 		c.IndentedJSON(http.StatusOK, talent)
+	}
+}
+
+func addTalent(a adding.Service) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		var input adding.TalentInput
+
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+
+		_, _ = a.AddTalent(&input)
 	}
 }

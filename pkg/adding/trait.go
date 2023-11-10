@@ -4,8 +4,14 @@ import (
 	"errors"
 	"github.com/tvday/dqm-helper/pkg/models"
 
+	_ "github.com/gin-gonic/gin/binding"
 	"github.com/gosimple/slug"
 )
+
+type TraitInput struct {
+	models.Trait
+	Name string `json:"name" binding:"required"`
+}
 
 // AddTrait queries the repository to add a new trait (name, and description).
 // If data does not contain a unique name an error will be returned.

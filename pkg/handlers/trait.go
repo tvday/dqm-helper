@@ -36,26 +36,18 @@ func getTrait(s listing.Service) func(c *gin.Context) {
 
 func addTrait(a adding.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		var input models.Trait
+		var input adding.TraitInput
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
-		inputErr := NewInputError()
-		if input.Name == "" {
-			inputErr.addMissingField("name")
-		}
-		if input.Description == "" {
-			inputErr.addMissingField("description")
-		}
-		if inputErr.isError() {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": inputErr.Error()})
-		}
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "hi"})
 
-		result, err := a.AddTrait(input)
-		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": inputErr.Error()})
-		}
-		c.IndentedJSON(http.StatusOK, result)
+		//result, err := a.AddTrait(input)
+		//if err != nil {
+		//	c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": inputErr.Error()})
+		//}
+		//c.IndentedJSON(http.StatusOK, result)
 	}
 }
