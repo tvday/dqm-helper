@@ -8,7 +8,7 @@ import (
 
 type FamilyOutput struct {
 	models.Family
-	Monsters []models.Monster `json:"monsters,omitempty"`
+	Monsters []MonsterOutput `json:"monsters,omitempty"`
 }
 
 // GetFamilies executes a query to return a list of all families in the repository.

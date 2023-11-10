@@ -6,22 +6,27 @@ import (
 	"github.com/tvday/dqm-helper/pkg/util"
 )
 
+type RankOutput struct {
+	models.Rank
+	Monsters []MonsterOutput `json:"monster,omitempty"`
+}
+
 // GetRanks executes a query to return a list of all ranks in the repository.
-func (s *Service) GetRanks() ([]models.Rank, error) {
+func (s *Service) GetRanks() ([]RankOutput, error) {
 	return s.getRankData()
 }
 
 // QueryRanks creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryRanks(data models.Rank) ([]models.Rank, error) {
+func (s *Service) QueryRanks(data models.Rank) ([]RankOutput, error) {
 	return s.getRankData(data)
 }
 
 // QueryRank creates and executes a query based on the provided data. Returns the first result.
 // Use non-default values in data for search parameters. Returns first result.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryRank(data models.Rank) (*models.Rank, error) {
+func (s *Service) QueryRank(data models.Rank) (*RankOutput, error) {
 	result, err := s.getRankData(data)
 	if err != nil {
 		return nil, err
@@ -35,7 +40,7 @@ func (s *Service) QueryRank(data models.Rank) (*models.Rank, error) {
 // getRankData creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
-func (s *Service) getRankData(data ...models.Rank) ([]models.Rank, error) {
+func (s *Service) getRankData(data ...models.Rank) ([]RankOutput, error) {
 	query := util.NewQuery(`SELECT name, rank_id, slug FROM rank`).OrderBy("rank_id")
 
 	if len(data) == 0 {
@@ -56,9 +61,9 @@ func (s *Service) getRankData(data ...models.Rank) ([]models.Rank, error) {
 		return nil, err
 	}
 
-	var ranks []models.Rank
+	var ranks []RankOutput
 	for rows.Next() {
-		var rank models.Rank
+		var rank RankOutput
 		if err := rows.Scan(&rank.Name, &rank.ID, &rank.Slug); err != nil {
 			// record not found
 			return nil, err

@@ -7,32 +7,39 @@ import (
 	"github.com/tvday/dqm-helper/pkg/util"
 )
 
+type MonsterOutput struct {
+	models.Monster
+	Traits   []MonsterTraitOutput  `json:"traits,omitempty"`
+	Talents  []MonsterTalentOutput `json:"talents,omitempty"`
+	ImageURL *string               `json:"image,omitempty"`
+}
+
 // GetMonsters executes a query to return a list of all monsters in the repository.
-func (s *Service) GetMonsters() ([]models.Monster, error) {
+func (s *Service) GetMonsters() ([]MonsterOutput, error) {
 	return s.getMonsterData(true)
 }
 
 // GetMonstersOfFamily executes a query to return a list of all monsters in the repository with a specific family_id.
-func (s *Service) GetMonstersOfFamily(id int) ([]models.Monster, error) {
+func (s *Service) GetMonstersOfFamily(id int) ([]MonsterOutput, error) {
 	return s.getMonsterData(true, models.Monster{FamilyID: id})
 }
 
 // GetMonstersOfRank executes a query to return a list of all monsters in the repository with a specific rank_id.
-func (s *Service) GetMonstersOfRank(id int) ([]models.Monster, error) {
+func (s *Service) GetMonstersOfRank(id int) ([]MonsterOutput, error) {
 	return s.getMonsterData(true, models.Monster{RankID: id})
 }
 
 // QueryMonsters creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryMonsters(data models.Monster) ([]models.Monster, error) {
+func (s *Service) QueryMonsters(data models.Monster) ([]MonsterOutput, error) {
 	return s.getMonsterData(false, data)
 }
 
 // QueryMonster creates and executes a query based on the provided data. Returns the first result.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryMonster(data models.Monster) (*models.Monster, error) {
+func (s *Service) QueryMonster(data models.Monster) (*MonsterOutput, error) {
 	result, err := s.getMonsterData(false, data)
 	if err != nil {
 		return nil, err
@@ -47,7 +54,7 @@ func (s *Service) QueryMonster(data models.Monster) (*models.Monster, error) {
 // simple is a bool that dictates whether full data of the monster will be returned a simplified set.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]models.Monster, error) {
+func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]MonsterOutput, error) {
 	var query *util.Query
 	if simple {
 		query = util.NewQuery(`
@@ -86,9 +93,9 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]models.
 		return nil, err
 	}
 
-	var monsters []models.Monster
+	var monsters []MonsterOutput
 	for rows.Next() {
-		var m models.Monster
+		var m MonsterOutput
 		if simple {
 			if err := rows.Scan(&m.Name, &m.ID, &m.MonsterNo, &m.Family, &m.Rank, &m.Slug, &m.ImageURL); err != nil {
 				return nil, err

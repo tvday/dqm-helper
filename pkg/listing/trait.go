@@ -7,22 +7,37 @@ import (
 	"github.com/tvday/dqm-helper/pkg/util"
 )
 
+type TraitOutput struct {
+	models.Trait
+}
+
+type MonsterTraitOutput struct {
+	TraitOutput
+	IsLargeTrait  string `json:"isLargeTrait,omitempty"`
+	RequiredLevel *int   `json:"requiredLevel,omitempty"`
+}
+
+type TalentTraitOutput struct {
+	TraitOutput
+	RequiredPoints int `json:"requiredPoints,omitempty"`
+}
+
 // GetTraits executes a query to return a list of all traits in the repository.
-func (s *Service) GetTraits() ([]models.Trait, error) {
+func (s *Service) GetTraits() ([]TraitOutput, error) {
 	return s.getTraitData()
 }
 
 // QueryTraits creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryTraits(data models.Trait) ([]models.Trait, error) {
+func (s *Service) QueryTraits(data models.Trait) ([]TraitOutput, error) {
 	return s.getTraitData(data)
 }
 
 // QueryTrait creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters. Returns the first result.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryTrait(data models.Trait) (*models.Trait, error) {
+func (s *Service) QueryTrait(data models.Trait) (*TraitOutput, error) {
 	result, err := s.getTraitData(data)
 	if err != nil {
 		return nil, err
@@ -36,7 +51,7 @@ func (s *Service) QueryTrait(data models.Trait) (*models.Trait, error) {
 // getTraitData creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
-func (s *Service) getTraitData(data ...models.Trait) ([]models.Trait, error) {
+func (s *Service) getTraitData(data ...models.Trait) ([]TraitOutput, error) {
 	query := util.NewQuery("SELECT name, trait_id, description, slug FROM trait")
 
 	if len(data) == 0 {
@@ -57,9 +72,9 @@ func (s *Service) getTraitData(data ...models.Trait) ([]models.Trait, error) {
 		return nil, err
 	}
 
-	var traits []models.Trait
+	var traits []TraitOutput
 	for rows.Next() {
-		var trait models.Trait
+		var trait TraitOutput
 		if err := rows.Scan(&trait.Name, &trait.ID, &trait.Description, &trait.Slug); err != nil {
 			// record not found
 			return nil, err
@@ -87,8 +102,8 @@ func extractTraitPredicates(q *util.Query, data models.Trait) (*util.Query, erro
 }
 
 // GetTraitsOfMonster executes a query to return a list of all traits in the repository of a particular monster, by id.
-func (s *Service) GetTraitsOfMonster(monsterID int) ([]models.Trait, error) {
-	var traits []models.Trait
+func (s *Service) GetTraitsOfMonster(monsterID int) ([]MonsterTraitOutput, error) {
+	var traits []MonsterTraitOutput
 
 	rows, err := s.db.Query(`
 		SELECT name, t.trait_id, description, is_large_trait, required_level, slug
@@ -101,7 +116,7 @@ func (s *Service) GetTraitsOfMonster(monsterID int) ([]models.Trait, error) {
 	}
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
-		var trait models.Trait
+		var trait MonsterTraitOutput
 		if err := rows.Scan(&trait.Name, &trait.ID, &trait.Description, &trait.IsLargeTrait, &trait.RequiredLevel, &trait.Slug); err != nil {
 			return nil, err
 		}
@@ -115,8 +130,8 @@ func (s *Service) GetTraitsOfMonster(monsterID int) ([]models.Trait, error) {
 }
 
 // GetTraitsOfTalent executes a query to return a list of all traits in the repository of a particular talent, by id.
-func (s *Service) GetTraitsOfTalent(talentID int) ([]models.Trait, error) {
-	var traits []models.Trait
+func (s *Service) GetTraitsOfTalent(talentID int) ([]TalentTraitOutput, error) {
+	var traits []TalentTraitOutput
 
 	rows, err := s.db.Query(`
 		SELECT name, t.trait_id, description, required_points, slug
@@ -129,7 +144,7 @@ func (s *Service) GetTraitsOfTalent(talentID int) ([]models.Trait, error) {
 	}
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
-		var trait models.Trait
+		var trait TalentTraitOutput
 		if err := rows.Scan(&trait.Name, &trait.ID, &trait.Description, &trait.RequiredPoints, &trait.Slug); err != nil {
 			return nil, err
 		}

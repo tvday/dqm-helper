@@ -7,9 +7,18 @@ import (
 	"github.com/tvday/dqm-helper/pkg/util"
 )
 
+type SkillOutput struct {
+	models.Skill
+}
+
+type TalentSkillOutput struct {
+	SkillOutput
+	RequiredPoints int `json:"requiredPoints,omitempty"`
+}
+
 // GetSkillsOfTalent executes a query to return a list of all skills in the repository of a particular talent, by id.
-func (s *Service) GetSkillsOfTalent(talentID int) ([]models.Skill, error) {
-	var skills []models.Skill
+func (s *Service) GetSkillsOfTalent(talentID int) ([]TalentSkillOutput, error) {
+	var skills []TalentSkillOutput
 
 	rows, err := s.db.Query(`
 		SELECT name, s.skill_id, description, required_points, slug
@@ -22,7 +31,7 @@ func (s *Service) GetSkillsOfTalent(talentID int) ([]models.Skill, error) {
 	}
 
 	for rows.Next() {
-		var skill models.Skill
+		var skill TalentSkillOutput
 		if err := rows.Scan(&skill.Name, &skill.ID, &skill.Description, &skill.RequiredPoints, &skill.Slug); err != nil {
 			return nil, err
 		}
@@ -36,21 +45,21 @@ func (s *Service) GetSkillsOfTalent(talentID int) ([]models.Skill, error) {
 }
 
 // GetSkills executes a query to return a list of all skills in the repository.
-func (s *Service) GetSkills() ([]models.Skill, error) {
+func (s *Service) GetSkills() ([]SkillOutput, error) {
 	return s.getSkillData()
 }
 
 // QuerySkills creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) QuerySkills(data models.Skill) ([]models.Skill, error) {
+func (s *Service) QuerySkills(data models.Skill) ([]SkillOutput, error) {
 	return s.getSkillData(data)
 }
 
 // QuerySkill creates and executes a query based on the provided data. Returns the first result.
 // Use non-default values in data for search parameters. Returns first result.
 // A struct with no non-default fields will return an error.
-func (s *Service) QuerySkill(data models.Skill) (*models.Skill, error) {
+func (s *Service) QuerySkill(data models.Skill) (*SkillOutput, error) {
 	result, err := s.getSkillData(data)
 	if err != nil {
 		return nil, err
@@ -64,7 +73,7 @@ func (s *Service) QuerySkill(data models.Skill) (*models.Skill, error) {
 // getSkillData creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
-func (s *Service) getSkillData(data ...models.Skill) ([]models.Skill, error) {
+func (s *Service) getSkillData(data ...models.Skill) ([]SkillOutput, error) {
 	query := util.NewQuery(`SELECT name, skill_id, mp_cost, description, slug FROM skill`)
 
 	if len(data) == 0 {
@@ -85,9 +94,9 @@ func (s *Service) getSkillData(data ...models.Skill) ([]models.Skill, error) {
 		return nil, err
 	}
 
-	var skills []models.Skill
+	var skills []SkillOutput
 	for rows.Next() {
-		var skill models.Skill
+		var skill SkillOutput
 		if err := rows.Scan(&skill.Name, &skill.ID, &skill.MPCost, &skill.Description, &skill.Slug); err != nil {
 			// record not found
 			return nil, err
