@@ -16,11 +16,11 @@ func (s *Service) GetSkillsOfTalent(talentID int) ([]models.Skill, error) {
        	FROM skill s JOIN talent_skill ts ON s.skill_id = ts.skill_id
        	WHERE talent_id = $1
        	ORDER BY required_points, name;`, talentID)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-	// Loop through rows, using Scan to assign column data to struct fields.
+
 	for rows.Next() {
 		var skill models.Skill
 		if err := rows.Scan(&skill.Name, &skill.ID, &skill.Description, &skill.RequiredPoints, &skill.Slug); err != nil {
@@ -80,6 +80,7 @@ func (s *Service) getSkillData(data ...models.Skill) ([]models.Skill, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}

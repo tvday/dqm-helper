@@ -6,22 +6,27 @@ import (
 	"github.com/tvday/dqm-helper/pkg/util"
 )
 
+type FamilyOutput struct {
+	models.Family
+	Monsters []models.Monster `json:"monsters,omitempty"`
+}
+
 // GetFamilies executes a query to return a list of all families in the repository.
-func (s *Service) GetFamilies() ([]models.Family, error) {
+func (s *Service) GetFamilies() ([]FamilyOutput, error) {
 	return s.getFamilyData()
 }
 
 // QueryFamilies creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryFamilies(data models.Family) ([]models.Family, error) {
+func (s *Service) QueryFamilies(data models.Family) ([]FamilyOutput, error) {
 	return s.getFamilyData(data)
 }
 
 // QueryFamily creates and executes a query based on the provided data. Returns the first result.
 // Use non-default values in data for search parameters. Returns first result.
 // A struct with no non-default fields will return an error.
-func (s *Service) QueryFamily(data models.Family) (*models.Family, error) {
+func (s *Service) QueryFamily(data models.Family) (*FamilyOutput, error) {
 	result, err := s.getFamilyData(data)
 	if err != nil {
 		return nil, err
@@ -35,8 +40,8 @@ func (s *Service) QueryFamily(data models.Family) (*models.Family, error) {
 // getFamilyData creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
-func (s *Service) getFamilyData(data ...models.Family) ([]models.Family, error) {
-	query := util.NewQuery(`SELECT name, family_id, slug FROM family`)
+func (s *Service) getFamilyData(data ...models.Family) ([]FamilyOutput, error) {
+	query := util.NewQuery(`SELECT name, family_id, slug FROM family`).OrderBy("family_id")
 
 	if len(data) == 0 {
 		// do nothing
@@ -51,13 +56,14 @@ func (s *Service) getFamilyData(data ...models.Family) ([]models.Family, error) 
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	var families []models.Family
+	var families []FamilyOutput
 	for rows.Next() {
-		var family models.Family
+		var family FamilyOutput
 		if err := rows.Scan(&family.Name, &family.ID, &family.Slug); err != nil {
 			// record not found
 			return nil, err

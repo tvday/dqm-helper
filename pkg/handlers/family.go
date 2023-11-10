@@ -7,28 +7,27 @@ import (
 	"net/http"
 )
 
-func getMonsters(s listing.Service) func(c *gin.Context) {
+func getFamilies(s listing.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		monsters, err := s.GetMonsters()
+		ranks, err := s.GetFamilies()
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, monsters)
+		c.IndentedJSON(http.StatusOK, ranks)
 	}
 }
 
-func getMonster(s listing.Service) func(c *gin.Context) {
+func getFamily(s listing.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		monster, err := s.QueryMonsters(models.Monster{Slug: c.Param("slug")})
+		rank, err := s.QueryFamilies(models.Family{Slug: c.Param("slug")})
 
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			//c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, monster)
+		c.IndentedJSON(http.StatusOK, rank)
 	}
 }

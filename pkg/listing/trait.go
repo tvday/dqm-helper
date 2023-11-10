@@ -52,6 +52,7 @@ func (s *Service) getTraitData(data ...models.Trait) ([]models.Trait, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -94,10 +95,10 @@ func (s *Service) GetTraitsOfMonster(monsterID int) ([]models.Trait, error) {
        	FROM trait t JOIN monster_trait mt ON t.trait_id = mt.trait_id
        	WHERE monster_id = $1
        	ORDER BY is_large_trait, required_level;`, monsterID)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
 		var trait models.Trait
@@ -122,10 +123,10 @@ func (s *Service) GetTraitsOfTalent(talentID int) ([]models.Trait, error) {
        	FROM trait t JOIN talent_trait tt ON t.trait_id = tt.trait_id
        	WHERE talent_id = $1
        	ORDER BY required_points, name;`, talentID)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
 		var trait models.Trait

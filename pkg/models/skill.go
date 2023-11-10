@@ -5,6 +5,6 @@ type Skill struct {
 	Slug           string `json:"slug,omitempty"`
 	ID             int    `json:"ID,omitempty"`
 	Description    string `json:"description,omitempty"`
-	MPCost         int    `json:"MPCost,omitempty"`
+	MPCost         int    `json:"mpCost,omitempty"`
 	RequiredPoints int    `json:"requiredPoints,omitempty"`
 }

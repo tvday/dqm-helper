@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/tvday/dqm-helper/pkg/adding"
 	"github.com/tvday/dqm-helper/pkg/handlers"
 	"github.com/tvday/dqm-helper/pkg/listing"
 	"log"
@@ -36,8 +37,9 @@ func main() {
 	CheckError(db.Ping())
 
 	lister := *listing.NewService(db)
+	adder := *adding.NewService(db)
 
-	router := handlers.Handler(lister)
+	router := handlers.Handler(lister, adder)
 
 	log.Fatal(router.Run(fmt.Sprintf(":%v", 8080)))
 

@@ -36,7 +36,7 @@ func (s *Service) QueryRank(data models.Rank) (*models.Rank, error) {
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
 func (s *Service) getRankData(data ...models.Rank) ([]models.Rank, error) {
-	query := util.NewQuery(`SELECT name, rank_id, slug FROM rank`)
+	query := util.NewQuery(`SELECT name, rank_id, slug FROM rank`).OrderBy("rank_id")
 
 	if len(data) == 0 {
 		// do nothing
@@ -51,6 +51,7 @@ func (s *Service) getRankData(data ...models.Rank) ([]models.Rank, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}

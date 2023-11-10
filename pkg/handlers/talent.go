@@ -21,7 +21,7 @@ func getTalents(s listing.Service) func(c *gin.Context) {
 
 func getTalent(s listing.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		talent, err := s.QueryTalent(models.Talent{Slug: c.Param("name")})
+		talent, err := s.QueryTalent(models.Talent{Slug: c.Param("slug")})
 
 		if err != nil {
 			//c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Record not found"})

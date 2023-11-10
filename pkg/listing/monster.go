@@ -54,7 +54,7 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]models.
 			SELECT m.name as name, monster_id, entry_no, f.name as family, r.name as rank, m.slug, image
 			FROM monster m
 			JOIN family f ON m.family_id = f.family_id
-			JOIN rank r ON m.rank_id = r.rank_id; `)
+			JOIN rank r ON m.rank_id = r.rank_id `)
 	} else {
 		query = util.NewQuery(`
 			SELECT m.name as name, monster_id, entry_no, f.name as family, r.name as rank, m.slug, image,
@@ -81,6 +81,7 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]models.
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
