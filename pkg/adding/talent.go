@@ -9,7 +9,7 @@ import (
 )
 
 type ExistingTalentSkillInput struct {
-	SkillID        int `json:"skillID" binding:"required"`
+	SkillID        int `json:"id" binding:"required"`
 	RequiredPoints int `json:"requiredPoints"`
 }
 
@@ -19,7 +19,7 @@ type NewTalentSkillInput struct {
 }
 
 type ExistingTalentTraitInput struct {
-	TraitID        int `json:"traitID" binding:"required"`
+	TraitID        int `json:"id" binding:"required"`
 	RequiredPoints int `json:"requiredPoints"`
 }
 

@@ -2,7 +2,7 @@ package models
 
 type Monster struct {
 	Name      string `json:"name,omitempty"`
-	ID        int    `json:"ID,omitempty"`
+	ID        int    `json:"id,omitempty"`
 	Slug      string `json:"slug,omitempty"`
 	MonsterNo int    `json:"monsterNo,omitempty"`
 	Family    string `json:"family,omitempty"`

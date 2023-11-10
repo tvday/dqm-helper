@@ -3,25 +3,27 @@ package adding
 import "github.com/tvday/dqm-helper/pkg/models"
 
 type ExistingMonsterTraitInput struct {
-	TraitID        int `json:"traitID" binding:"required"`
-	RequiredLevel  int `json:"requiredLevel"`
-	RequiredPoints int `json:"requiredPoints"`
+	TraitID        int  `json:"id" binding:"required"`
+	IsLargeTrait   bool `json:"isLargeTrait"`
+	RequiredLevel  int  `json:"requiredLevel"`
+	RequiredPoints int  `json:"requiredPoints"`
 }
 
 type NewMonsterTraitInput struct {
 	TraitInput
-	RequiredLevel  int `json:"requiredLevel"`
-	RequiredPoints int `json:"requiredPoints"`
+	IsLargeTrait   bool `json:"isLargeTrait"`
+	RequiredLevel  int  `json:"requiredLevel"`
+	RequiredPoints int  `json:"requiredPoints"`
 }
 
 type ExistingMonsterTalentInput struct {
-	TalentID   int  `json:"talentID" binding:"required"`
-	IsInherent bool `json:"isInherent" binding:"required"`
+	TalentID   int  `json:"id" binding:"required"`
+	IsInherent bool `json:"isInherent"`
 }
 
 type NewMonsterTalentInput struct {
 	TalentInput
-	IsInherent bool `json:"isInherent" binding:"required"`
+	IsInherent bool `json:"isInherent"`
 }
 
 type MonsterInput struct {

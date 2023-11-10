@@ -42,7 +42,7 @@ func addTrait(a adding.Service) func(c *gin.Context) {
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, gin.H{"message": "hi"})
+		c.IndentedJSON(http.StatusOK, input)
 
 		//result, err := a.AddTrait(input)
 		//if err != nil {

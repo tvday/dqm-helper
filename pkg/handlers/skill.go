@@ -36,29 +36,18 @@ func getSkill(s listing.Service) func(c *gin.Context) {
 
 func addSkill(s adding.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		var input models.Skill
+		var input adding.SkillInput
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
-		iErr := NewInputError()
-		if input.Name == "" {
-			iErr.addMissingField("name")
-		}
-		if input.Description == "" {
-			iErr.addMissingField("description")
-		}
-		if input.MPCost == 0 {
-			iErr.addMissingField("mpCost")
-		}
-		if iErr.isError() {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": iErr.Error()})
-		}
+		c.IndentedJSON(http.StatusOK, input)
 
-		result, err := s.AddSkill(input)
-		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-		c.IndentedJSON(http.StatusOK, result)
+		//result, err := s.AddSkill(input)
+		//if err != nil {
+		//	c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		//}
+		//c.IndentedJSON(http.StatusOK, result)
 	}
 }

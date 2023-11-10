@@ -37,10 +37,12 @@ func getTalent(s listing.Service) func(c *gin.Context) {
 func addTalent(a adding.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var input adding.TalentInput
-
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
+
+		c.IndentedJSON(http.StatusOK, input)
 
 		_, _ = a.AddTalent(&input)
 	}
