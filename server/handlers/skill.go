@@ -1,10 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/tvday/dqm-helper/pkg/adding"
-	"github.com/tvday/dqm-helper/pkg/listing"
-	"github.com/tvday/dqm-helper/pkg/models"
+	"github.com/tvday/dqm-helper/server/adding"
+	"github.com/tvday/dqm-helper/server/listing"
+	"github.com/tvday/dqm-helper/server/models"
 	"net/http"
 )
 
@@ -42,12 +43,13 @@ func addSkill(s adding.Service) func(c *gin.Context) {
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, input)
+		result, err := s.AddSkill(input)
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
-		//result, err := s.AddSkill(input)
-		//if err != nil {
-		//	c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		//}
-		//c.IndentedJSON(http.StatusOK, result)
+		c.Header("Location", fmt.Sprintf("/skills/%s", result.Slug))
+		c.IndentedJSON(http.StatusCreated, result)
 	}
 }

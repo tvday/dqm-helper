@@ -1,6 +1,6 @@
 package adding
 
-import "github.com/tvday/dqm-helper/pkg/models"
+import "github.com/tvday/dqm-helper/server/models"
 
 type ExistingMonsterTraitInput struct {
 	TraitID        int  `json:"id" binding:"required"`

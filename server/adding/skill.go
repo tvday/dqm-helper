@@ -1,9 +1,8 @@
 package adding
 
 import (
-	"errors"
 	"github.com/gosimple/slug"
-	"github.com/tvday/dqm-helper/pkg/models"
+	"github.com/tvday/dqm-helper/server/models"
 )
 
 type SkillInput struct {
@@ -14,17 +13,7 @@ type SkillInput struct {
 // AddSkill queries the repository to add a new skill (name, description, mp cost).
 // If data does not contain a unique name an error will be returned.
 // Returns the data of the added row: name, id, description, mp cost, and slug.
-func (s *Service) AddSkill(data models.Skill) (*models.Skill, error) {
-	if data.Name == "" {
-		return nil, errors.New("missing name field")
-	}
-	if data.Description == "" {
-		return nil, errors.New("missing description field")
-	}
-	if data.MPCost == 0 {
-		return nil, errors.New("missing description field")
-	}
-
+func (s *Service) AddSkill(data SkillInput) (*models.Skill, error) {
 	data.Slug = slug.Make(data.Name)
 
 	row := s.db.QueryRow(`

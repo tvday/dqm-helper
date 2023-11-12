@@ -3,9 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/tvday/dqm-helper/pkg/adding"
-	"github.com/tvday/dqm-helper/pkg/handlers"
-	"github.com/tvday/dqm-helper/pkg/listing"
+	"github.com/tvday/dqm-helper/server/adding"
+	"github.com/tvday/dqm-helper/server/handlers"
+	"github.com/tvday/dqm-helper/server/listing"
 	"log"
 	"net/http"
 

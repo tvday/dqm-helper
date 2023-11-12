@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tvday/dqm-helper/pkg/adding"
-	"github.com/tvday/dqm-helper/pkg/listing"
+	"github.com/tvday/dqm-helper/server/adding"
+	"github.com/tvday/dqm-helper/server/listing"
 	"net/http"
 )
 

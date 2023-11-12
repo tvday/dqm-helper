@@ -2,8 +2,8 @@ package listing
 
 import (
 	"errors"
-	"github.com/tvday/dqm-helper/pkg/models"
-	"github.com/tvday/dqm-helper/pkg/util"
+	"github.com/tvday/dqm-helper/server/models"
+	"github.com/tvday/dqm-helper/server/util"
 
 	_ "github.com/lib/pq"
 )

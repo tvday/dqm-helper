@@ -3,8 +3,8 @@ package listing
 import (
 	"errors"
 	_ "github.com/lib/pq"
-	"github.com/tvday/dqm-helper/pkg/models"
-	"github.com/tvday/dqm-helper/pkg/util"
+	"github.com/tvday/dqm-helper/server/models"
+	"github.com/tvday/dqm-helper/server/util"
 )
 
 type TraitOutput struct {
