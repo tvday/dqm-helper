@@ -1,7 +1,11 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 export const useSortableTable = <T, K extends keyof T>(data: T[]): [T[], (sortField: K, sortOrder: string) => void] => {
-    const [tableData, setTableData] = useState(data);
+    const [tableData, setTableData] = useState<T[]>(data);
+
+    useEffect(() => {
+        setTableData(data)
+    }, [data]);
 
     const handleSorting = (sortField: K, sortOrder: string) => {
 
@@ -15,7 +19,7 @@ export const useSortableTable = <T, K extends keyof T>(data: T[]): [T[], (sortFi
                 if (valB === undefined) return -1;
 
                 return (
-                    (Number(a) - Number(b)) * (sortOrder === "asc" ? 1 : -1) ||
+                    (Number(valA) - Number(valB)) * (sortOrder === "asc" ? 1 : -1) ||
                     valA.localeCompare(valB.toString(), "en", {
                         numeric: true,
                         sensitivity: "base"

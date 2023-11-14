@@ -11,12 +11,11 @@ const TableHead = <T, >(props: TableHeadProps<T>) => {
     const [order, setOrder] = useState("asc");
 
     const handleSortingChange = (accessor: keyof T) => {
-        console.log(accessor);
-
         const sortOrder =
             accessor === sortField && order === "asc" ? "desc" : "asc";
         setSortField(accessor);
         setOrder(sortOrder);
+        console.log(accessor, sortOrder);
         props.handleSorting(accessor, sortOrder);
     };
 
