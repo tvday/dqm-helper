@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/tvday/dqm-helper/server/adding"
 	"github.com/tvday/dqm-helper/server/listing"
@@ -10,7 +12,11 @@ import (
 func Handler(l listing.Service, a adding.Service) *gin.Engine {
 	router := gin.Default()
 
-	router.GET("/", homePage)
+	router.Use(cors.Default())
+
+	router.Use(static.Serve("/", static.LocalFile("./client/build", true)))
+
+	//router.GET("/", homePage)
 
 	group := router.Group("api/v1")
 	{
