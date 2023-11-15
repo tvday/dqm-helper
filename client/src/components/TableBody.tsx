@@ -1,4 +1,6 @@
 import {Column} from "./Table";
+import {FC} from "react";
+import {MonsterData} from "../pages/Monsters";
 
 interface TableBodyProps<T> {
     columns: Column<T>[],
@@ -7,7 +9,7 @@ interface TableBodyProps<T> {
 
 const TableBody = <T, >(props: TableBodyProps<T>) => {
     return (
-        <tbody className="table-group-divider">
+        <tbody>
         {props.tableData.map((data, index) => {
             return (
                 <tr key={index}>
