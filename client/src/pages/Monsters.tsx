@@ -57,11 +57,16 @@ const Monsters = () => {
     return (
         <>
             <h1>Monsters</h1>
+            <i className="icon bi-envelope"></i>
             {loading && <div>A moment please...</div>}
             {error && (
                 <div>{`There is a problem fetching the post data - ${error}`}</div>
             )}
-            {data && <Table caption={"Monsters"} data={data} columns={columns}/>}
+            {data.length > 0 &&
+                <div className="container">
+                    <Table caption={"Monsters"} data={data} columns={columns}/>
+                </div>
+            }
         </>
 
         // <>
