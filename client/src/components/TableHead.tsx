@@ -1,12 +1,9 @@
 import {Column} from "./Table";
 
-<<<<<<< HEAD
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faSort, faSortUp, faSortDown} from '@fortawesome/free-solid-svg-icons'
 import {Sorter} from "../utils/genericSort";
 
-=======
->>>>>>> parent of 31ff750 (added little styling)
 interface TableHeadProps<T> {
     columns: Column<T>[]
     changeSorter: (sortField: keyof T, sortOrder: "asc" | "desc") => void
@@ -26,27 +23,20 @@ const TableHead = <T, >(props: TableHeadProps<T>) => {
         <thead>
         <tr>
             {props.columns.map(({label, accessor, sortable}) => {
-<<<<<<< HEAD
                 const icon = props.activeSorter.sortField === accessor && props.activeSorter.sortOrder === "asc"
                     ? faSortUp
                     : props.activeSorter.sortField === accessor && props.activeSorter.sortOrder === "desc"
                         ? faSortDown
                         : faSort
-=======
-                const cl = sortable
-                    ? sortField === accessor && order === "asc"
-                        ? "up"
-                        : sortField === accessor && order === "desc"
-                            ? "down"
-                            : "default"
-                    : "";
->>>>>>> parent of 31ff750 (added little styling)
                 return <th
                     key={accessor.toString()}
                     onClick={sortable ? () => handleSortingChange(accessor) : undefined}
-                    className={cl}
+                    className={sortable ? 'sortable' : ''}
                 >
-                    {label}
+                    <div className="row">
+                        <div className="col-auto me-auto">{label}</div>
+                        <div className="col-auto">{sortable && <FontAwesomeIcon icon={icon}/>}</div>
+                    </div>
                 </th>;
             })}
         </tr>
