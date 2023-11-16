@@ -1,14 +1,17 @@
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import {useEffect, useState} from "react";
-import {genericSort, Sorter} from "../utils/genericSort";
-import {genericFilter, Filter} from "../utils/genericFilter";
+import {tableSort, Sorter} from "../utils/tableSort";
+import {tableFilter, Filter} from "../utils/tableFilter";
 import TableFilters from "./TableFilters";
+import TableSearch from "./TableSearch";
+import {tableSearch, Searcher} from "../utils/tableSearch";
 
 export interface Column<T> {
     label: string,
     accessor: keyof T
     sortable: boolean
+    searchable: boolean
 }
 
 export interface FilterGroup<T> {
@@ -32,19 +35,28 @@ const SortableTable = <T, >(props: TableProps<T>) => {
         accessor: '' as keyof T,
         order: "asc"
     })
+    const [activeSearcher, setActiveSearch] = useState<Searcher<T>>({
+        value: '',
+        accessors: props.columns
+            .filter(col => col.searchable)
+            .map(({accessor}) => accessor)
+    })
     const [activeFilters, setActiveFilters] = useState<Filter<T>[]>([])
-    // const [activeSearch, setActiveSearch] = useState()
 
+
+    // update data based on filters and sorting
     useEffect(() => {
         const result = [...props.data]
             .filter((obj) =>
-                genericFilter<T>(obj, activeFilters))
+                tableFilter<T>(obj, activeFilters))
+            .filter((obj) =>
+                tableSearch(obj, activeSearcher))
             .sort((a: T, b: T) =>
-                genericSort(a, b, activeSorter.accessor, activeSorter.order)
+                tableSort(a, b, activeSorter.accessor, activeSorter.order)
             )
 
         setTableData(result)
-    }, [activeSorter, activeFilters]);
+    }, [activeSorter, activeSearcher, activeFilters]);
 
     const handleFilterChange = (accessor: keyof T, value: string, checked: boolean) => {
         let result = [...activeFilters]
@@ -59,7 +71,9 @@ const SortableTable = <T, >(props: TableProps<T>) => {
         } else {
             console.log('unchecked?')
             if (changedFilterIndex >= 0) {
-                result[changedFilterIndex].values = result[changedFilterIndex].values.filter((val) => {return val !== value})
+                result[changedFilterIndex].values = result[changedFilterIndex].values.filter((val) => {
+                    return val !== value
+                })
             }
         }
         console.log('active filters: ', result)
@@ -69,6 +83,13 @@ const SortableTable = <T, >(props: TableProps<T>) => {
 
     return (
         <>
+            <TableSearch
+                onSearchChange={(query =>
+                    setActiveSearch({
+                        accessors: activeSearcher.accessors,
+                        value: query
+                    }))}
+            />
             <TableFilters filters={props.filters} onFilterChange={handleFilterChange}/>
             <table className="table table-bordered table-striped table-hover">
                 <caption>{props.caption}</caption>

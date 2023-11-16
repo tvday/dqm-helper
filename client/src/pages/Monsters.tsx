@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Table, {Column, FilterGroup} from "../components/Table";
 
+const APIBase = 'http://localhost:8080/api/v1'
+// const APIBase = 'http://10.00.54:8080/api/v1' // for testing on mobile devices
 
 // function getMonsters() {
 //     fetch("localhost:8080/api/v1/monsters")
@@ -19,11 +21,11 @@ export type MonsterData = {
 }
 
 const columns: Column<MonsterData>[] = [
-    {label: "Image", accessor: "imgURL", sortable: false},
-    {label: "Name", accessor: "name", sortable: true},
-    {label: "Monster No.", accessor: "monsterNo", sortable: true},
-    {label: "Rank", accessor: "rank", sortable: true},
-    {label: "Family", accessor: "family", sortable: true},
+    {label: "Image", accessor: "imgURL", sortable: false, searchable: false},
+    {label: "Name", accessor: "name", sortable: true, searchable: true},
+    {label: "Monster No.", accessor: "monsterNo", sortable: true, searchable: false},
+    {label: "Rank", accessor: "rank", sortable: true, searchable: false},
+    {label: "Family", accessor: "family", sortable: true, searchable: true},
 ]
 
 const filters: FilterGroup<MonsterData>[] = [
@@ -45,7 +47,7 @@ const Monsters = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/v1/monsters")
+        fetch(APIBase + '/monsters')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`error status: ${response.status}`);
@@ -53,7 +55,6 @@ const Monsters = () => {
                 return response.json();
             })
             .then((resData) => {
-                console.log(resData);
                 setData(resData);
                 setError(null);
             })
@@ -81,36 +82,6 @@ const Monsters = () => {
                 </div>
             }
         </>
-
-        // <>
-        //     <h1>Monsters</h1>
-        //     {loading && <div>A moment please...</div>}
-        //     {error && (
-        //         <div>{`There is a problem fetching the post data - ${error}`}</div>
-        //     )}
-        //     {data && <table >
-        //         <thead>
-        //         <tr>
-        //             <th>Image</th>
-        //             <th>Name</th>
-        //             <th>Monster No.</th>
-        //             <th>Rank</th>
-        //             <th>Family</th>
-        //         </tr>
-        //         </thead>
-        //         <tbody>
-        //         {data.map(({id, name, monsterNo, imgURL, rank, family}) => (
-        //             <tr key={id}>
-        //                 <td>{imgURL}</td>
-        //                 <td>{name}</td>
-        //                 <td>{monsterNo}</td>
-        //                 <td>{rank}</td>
-        //                 <td>{family}</td>
-        //             </tr>
-        //         ))}
-        //         </tbody>
-        //     </table>}
-        // </>
     );
 };
 

@@ -3,7 +3,7 @@ export interface Filter<T> {
     values: any[]
 }
 
-export const genericFilter = <T>(obj: T, filters: Filter<T>[]) => {
+export const tableFilter = <T>(obj: T, filters: Filter<T>[]) => {
     return filters.every((filter) => {
         return filter.values.length == 0 ||
             filter.values.some((value) => {
