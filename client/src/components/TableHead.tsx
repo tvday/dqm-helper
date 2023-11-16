@@ -14,7 +14,7 @@ const TableHead = <T, >(props: TableHeadProps<T>) => {
 
     const handleSortingChange = (accessor: keyof T) => {
         const sortOrder =
-            accessor === props.activeSorter.sortField && props.activeSorter.sortOrder === "asc" ? "desc" : "asc";
+            accessor === props.activeSorter.accessor && props.activeSorter.order === "asc" ? "desc" : "asc";
         console.log(accessor, sortOrder);
         props.changeSorter(accessor, sortOrder);
     };
@@ -23,9 +23,9 @@ const TableHead = <T, >(props: TableHeadProps<T>) => {
         <thead>
         <tr>
             {props.columns.map(({label, accessor, sortable}) => {
-                const icon = props.activeSorter.sortField === accessor && props.activeSorter.sortOrder === "asc"
+                const icon = props.activeSorter.accessor === accessor && props.activeSorter.order === "asc"
                     ? faSortUp
-                    : props.activeSorter.sortField === accessor && props.activeSorter.sortOrder === "desc"
+                    : props.activeSorter.accessor === accessor && props.activeSorter.order === "desc"
                         ? faSortDown
                         : faSort
                 return <th

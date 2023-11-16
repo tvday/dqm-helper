@@ -1,6 +1,6 @@
 export interface Sorter<T> {
-    sortField: keyof T
-    sortOrder: "asc" | "desc"
+    accessor: keyof T
+    order: "asc" | "desc"
 }
 
 export const genericSort = <T, K extends keyof T>(a: T, b: T, sortField: K, sortOrder: "asc" | "desc") => {

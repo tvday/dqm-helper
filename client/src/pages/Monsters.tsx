@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Table, {Column} from "../components/Table";
+import Table, {Column, FilterGroup} from "../components/Table";
 
 
 // function getMonsters() {
@@ -24,6 +24,19 @@ const columns: Column<MonsterData>[] = [
     {label: "Monster No.", accessor: "monsterNo", sortable: true},
     {label: "Rank", accessor: "rank", sortable: true},
     {label: "Family", accessor: "family", sortable: true},
+]
+
+const filters: FilterGroup<MonsterData>[] = [
+    {
+        label: 'Rank',
+        accessor: 'rank',
+        values: ['G', 'F', 'E', 'D', 'C', 'B', 'A', 'S', 'X']
+    },
+    {
+        label: 'Family',
+        accessor: 'family',
+        values: ['Slime', 'Dragon', 'Nature', 'Beast', 'Material', 'Demon', 'Undead', '???']
+    }
 ]
 
 const Monsters = () => {
@@ -64,7 +77,7 @@ const Monsters = () => {
             )}
             {data.length > 0 &&
                 <div className="container">
-                    <Table caption={"Monsters"} data={data} columns={columns}/>
+                    <Table caption={"Monsters"} data={data} columns={columns} filters={filters}/>
                 </div>
             }
         </>
