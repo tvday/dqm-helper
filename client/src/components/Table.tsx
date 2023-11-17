@@ -12,6 +12,7 @@ export interface Column<T> {
     accessor: keyof T
     sortable: boolean
     searchable: boolean
+    link?: string
 }
 
 export interface FilterGroup<T> {

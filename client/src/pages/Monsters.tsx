@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Table, {Column, FilterGroup} from "../components/Table";
 
-const APIBase = 'http://localhost:8080/api/v1'
-// const APIBase = 'http://10.00.54:8080/api/v1' // for testing on mobile devices
+// const APIBase = 'http://localhost:8080/api/v1'
+const APIBase = 'http://10.00.54:8080/api/v1' // for testing on mobile devices
 
 // function getMonsters() {
 //     fetch("localhost:8080/api/v1/monsters")
@@ -15,6 +15,7 @@ export type MonsterData = {
     id: number
     name: string
     monsterNo: number
+    slug: string
     rank: string
     family: string
     imgURL: string
@@ -22,7 +23,7 @@ export type MonsterData = {
 
 const columns: Column<MonsterData>[] = [
     {label: "Image", accessor: "imgURL", sortable: false, searchable: false},
-    {label: "Name", accessor: "name", sortable: true, searchable: true},
+    {label: "Name", accessor: "name", sortable: true, searchable: true, link: '/monsters/[slug]'},
     {label: "Monster No.", accessor: "monsterNo", sortable: true, searchable: false},
     {label: "Rank", accessor: "rank", sortable: true, searchable: false},
     {label: "Family", accessor: "family", sortable: true, searchable: true},
@@ -69,7 +70,7 @@ const Monsters = () => {
     }, []);
 
     return (
-        <>
+        <div className="container">
             <h1>Monsters</h1>
             <i className="icon bi-envelope"></i>
             {loading && <div>A moment please...</div>}
@@ -81,7 +82,7 @@ const Monsters = () => {
                     <Table caption={"Monsters"} data={data} columns={columns} filters={filters}/>
                 </div>
             }
-        </>
+        </div>
     );
 };
 
