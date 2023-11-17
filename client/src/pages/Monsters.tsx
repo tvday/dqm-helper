@@ -1,35 +1,17 @@
 import React, {useEffect, useState} from "react";
 import Table, {Column, FilterGroup} from "../components/Table";
+import {MonsterSimpleData} from "../interfaces/monster";
+import {APIBase} from "../utils/api";
 
-// const APIBase = 'http://localhost:8080/api/v1'
-const APIBase = 'http://10.00.54:8080/api/v1' // for testing on mobile devices
-
-// function getMonsters() {
-//     fetch("localhost:8080/api/v1/monsters")
-//         .then(data => {
-//             setD
-//         })
-// }
-
-export type MonsterData = {
-    id: number
-    name: string
-    monsterNo: number
-    slug: string
-    rank: string
-    family: string
-    imgURL: string
-}
-
-const columns: Column<MonsterData>[] = [
+const columns: Column<MonsterSimpleData>[] = [
     {label: "Image", accessor: "imgURL", sortable: false, searchable: false},
     {label: "Name", accessor: "name", sortable: true, searchable: true, link: '/monsters/[slug]'},
     {label: "Monster No.", accessor: "monsterNo", sortable: true, searchable: false},
     {label: "Rank", accessor: "rank", sortable: true, searchable: false},
-    {label: "Family", accessor: "family", sortable: true, searchable: true},
+    {label: "Family", accessor: "family", sortable: true, searchable: false},
 ]
 
-const filters: FilterGroup<MonsterData>[] = [
+const filters: FilterGroup<MonsterSimpleData>[] = [
     {
         label: 'Rank',
         accessor: 'rank',
@@ -43,7 +25,7 @@ const filters: FilterGroup<MonsterData>[] = [
 ]
 
 const Monsters = () => {
-    const [data, setData] = useState<MonsterData[]>([]);
+    const [data, setData] = useState<MonsterSimpleData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -72,7 +54,6 @@ const Monsters = () => {
     return (
         <div className="container">
             <h1>Monsters</h1>
-            <i className="icon bi-envelope"></i>
             {loading && <div>A moment please...</div>}
             {error && (
                 <div>{`There is a problem fetching the post data - ${error}`}</div>

@@ -26,8 +26,6 @@ const FilterGroup = <T, >(props: FilterGroupProps<T>) => {
                             id={'btn-check-' + label + '-' + index}
                             autoComplete='off'
                             onChange={(event) => {
-                                console.log('from filter group: ', accessor, value, event.target.checked)
-
                                 props.onFilterChange(accessor, value, event.target.checked)
                             }}
                         />

@@ -10,8 +10,8 @@ import {tableSearch, Searcher} from "../utils/tableSearch";
 export interface Column<T> {
     label: string,
     accessor: keyof T
-    sortable: boolean
-    searchable: boolean
+    sortable?: boolean
+    searchable?: boolean
     link?: string
 }
 
@@ -29,7 +29,7 @@ interface TableProps<T> {
 }
 
 
-const SortableTable = <T, >(props: TableProps<T>) => {
+const Table = <T, >(props: TableProps<T>) => {
     const [tableData, setTableData] = useState<T[]>(props.data);
 
     const [activeSorter, setActiveSorter] = useState<Sorter<T>>({
@@ -70,14 +70,12 @@ const SortableTable = <T, >(props: TableProps<T>) => {
                 result.push({accessor: accessor, values: [value]})
             }
         } else {
-            console.log('unchecked?')
             if (changedFilterIndex >= 0) {
                 result[changedFilterIndex].values = result[changedFilterIndex].values.filter((val) => {
                     return val !== value
                 })
             }
         }
-        console.log('active filters: ', result)
 
         setActiveFilters(result)
     }
@@ -105,4 +103,4 @@ const SortableTable = <T, >(props: TableProps<T>) => {
     );
 };
 
-export default SortableTable;
+export default Table;
