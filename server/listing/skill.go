@@ -21,7 +21,7 @@ func (s *Service) GetSkillsOfTalent(talentID int) ([]TalentSkillOutput, error) {
 	var skills []TalentSkillOutput
 
 	rows, err := s.db.Query(`
-		SELECT name, s.skill_id, description, required_points, slug
+		SELECT name, s.skill_id, mp_cost, description, required_points, slug
        	FROM skill s JOIN talent_skill ts ON s.skill_id = ts.skill_id
        	WHERE talent_id = $1
        	ORDER BY required_points, name;`, talentID)
@@ -32,7 +32,7 @@ func (s *Service) GetSkillsOfTalent(talentID int) ([]TalentSkillOutput, error) {
 
 	for rows.Next() {
 		var skill TalentSkillOutput
-		if err := rows.Scan(&skill.Name, &skill.ID, &skill.Description, &skill.RequiredPoints, &skill.Slug); err != nil {
+		if err := rows.Scan(&skill.Name, &skill.ID, &skill.MPCost, &skill.Description, &skill.RequiredPoints, &skill.Slug); err != nil {
 			return nil, err
 		}
 		skills = append(skills, skill)

@@ -1,11 +1,11 @@
-import TableHead from "./TableHead";
-import TableBody from "./TableBody";
+import TableHead from "../table/TableHead";
+import TableBody from "../table/TableBody";
 import {useEffect, useState} from "react";
-import {tableSort, Sorter} from "../utils/tableSort";
-import {tableFilter, Filter} from "../utils/tableFilter";
-import TableFilters from "./TableFilters";
-import TableSearch from "./TableSearch";
-import {tableSearch, Searcher} from "../utils/tableSearch";
+import {tableSort, Sorter} from "../../utils/tableSort";
+import {tableFilter, Filter} from "../../utils/tableFilter";
+import TableFilters from "../table/TableFilters";
+import TableSearch from "../table/TableSearch";
+import {tableSearch, Searcher} from "../../utils/tableSearch";
 
 export interface Column<T> {
     label: string,

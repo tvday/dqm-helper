@@ -22,7 +22,7 @@ func getMonsters(s listing.Service) func(c *gin.Context) {
 
 func getMonster(s listing.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		monster, err := s.QueryMonsters(models.Monster{Slug: c.Param("slug")})
+		monster, err := s.QueryMonster(models.Monster{Slug: c.Param("slug")})
 
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

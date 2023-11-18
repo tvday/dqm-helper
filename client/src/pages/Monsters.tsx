@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Table, {Column, FilterGroup} from "../components/Table";
+import Table, {Column, FilterGroup} from "../components/table/Table";
 import {MonsterSimpleData} from "../interfaces/monster";
 import {APIBase} from "../utils/api";
 

@@ -2,7 +2,7 @@ import {Column} from "./Table";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faSort, faSortUp, faSortDown} from '@fortawesome/free-solid-svg-icons'
-import {Sorter} from "../utils/tableSort";
+import {Sorter} from "../../utils/tableSort";
 
 interface TableHeadProps<T> {
     columns: Column<T>[]
