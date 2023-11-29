@@ -17,7 +17,7 @@ const MonsterCard = ({data}: MonsterCardProps) => {
             <div className="h1 text-center">{data.name}</div>
             <div className='container bg-dark-subtle'>
                 <div className='row h5'>
-                    <div className='col fst-italic'>Monster No.</div>
+                    <div className='col fst-italic text-bg-warning'>Monster No.</div>
                     <div className='col text-end'>{data.monsterNo}</div>
                 </div>
                 <div className='row h5'>

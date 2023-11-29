@@ -60,7 +60,7 @@ const Monsters = () => {
             )}
             {data.length > 0 &&
                 <div className="container">
-                    <Table caption={"Monsters"} data={data} columns={columns} filters={filters}/>
+                    <Table data={data} columns={columns} filters={filters} search={true}/>
                 </div>
             }
         </div>

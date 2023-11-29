@@ -8,6 +8,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faStar} from '@fortawesome/free-solid-svg-icons'
 import MonsterCard from "../components/monster/MonsterCard";
 import GrowthRates from "../components/monster/GrowthRates";
+import Resistances from "../components/monster/Resistances";
+import Traits from "../components/monster/Traits";
+import Talents from "../components/monster/Talents";
 
 type MonsterParams = {
     slug: string
@@ -54,6 +57,12 @@ const Monster = () => {
                         <MonsterCard data={data}/>
                         <br/>
                         <GrowthRates data={data}/>
+                        <br/>
+                        <Resistances data={data}/>
+                        <br/>
+                        <Traits traits={data.traits}/>
+                        <br/>
+                        <Talents talents={data.talents}/>
                     </div>
                     {/*<div className='col bg-primary-subtle'>hi</div>*/}
                 </div>

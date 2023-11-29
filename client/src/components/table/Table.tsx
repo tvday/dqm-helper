@@ -22,10 +22,11 @@ export interface FilterGroup<T> {
 }
 
 interface TableProps<T> {
-    caption: string
+    caption?: string
     data: T[]
     columns: Column<T>[]
-    filters: FilterGroup<T>[]
+    filters?: FilterGroup<T>[]
+    search?: boolean
 }
 
 
@@ -57,7 +58,7 @@ const Table = <T, >(props: TableProps<T>) => {
             )
 
         setTableData(result)
-    }, [activeSorter, activeSearcher, activeFilters]);
+    }, [activeSorter, activeSearcher, activeFilters, props.data]);
 
     const handleFilterChange = (accessor: keyof T, value: string, checked: boolean) => {
         let result = [...activeFilters]
@@ -82,18 +83,17 @@ const Table = <T, >(props: TableProps<T>) => {
 
     return (
         <>
-            <TableSearch
+            {props.search && <TableSearch
                 onSearchChange={(query =>
                     setActiveSearch({
                         accessors: activeSearcher.accessors,
                         value: query
                     }))}
-            />
-            <TableFilters filters={props.filters} onFilterChange={handleFilterChange}/>
+            />}
+            {props.filters && <TableFilters filters={props.filters} onFilterChange={handleFilterChange}/>}
             <table className="table table-bordered table-striped table-hover">
-                <caption>{props.caption}</caption>
+                {props.caption && <caption>{props.caption}</caption>}
                 <TableHead columns={props.columns}
-                    // handleSorting={handleSorting}
                            changeSorter={(sortField, sortOrder) =>
                                setActiveSorter({accessor: sortField, order: sortOrder})}
                            activeSorter={activeSorter}/>

@@ -46,7 +46,7 @@ const TableFilters = <T, >(props: TableFiltersProps<T>) => {
 
     return (
         <>
-            <div>Filters</div>
+            <div className="h5">Filters</div>
             {props.filters.map((filter, index) => {
                 return <FilterGroup key={index} data={filter} onFilterChange={props.onFilterChange}/>
             })}
