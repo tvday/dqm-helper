@@ -26,10 +26,19 @@ type NewMonsterTalentInput struct {
 	IsInherent bool `json:"isInherent"`
 }
 
+type GrowthRateInput struct {
+}
+
+type ResistanceInput struct {
+}
+
 type MonsterInput struct {
 	models.Monster
 	Name      string `json:"name" binding:"required"`
 	MonsterNo int    `json:"monsterNo" binding:"required"`
+
+	GrowthRates []GrowthRateInput `json:"growthRates" binding:"dive"`
+	Resistances []ResistanceInput `json:"resistances" binding:"dive"`
 
 	NewTraits       []NewMonsterTraitInput       `json:"newTraits" binding:"dive"`
 	ExistingTraits  []ExistingMonsterTraitInput  `json:"existingTraits" binding:"dive"`

@@ -56,15 +56,14 @@ const Monster = () => {
                     <div className='col bg-success-subtle'>
                         <MonsterCard data={data}/>
                         <br/>
-                        <GrowthRates data={data}/>
+                        <GrowthRates growthRates={data.growthRates}/>
                         <br/>
-                        <Resistances data={data}/>
+                        <Resistances resistances={data.resistances}/>
                         <br/>
                         <Traits traits={data.traits}/>
                         <br/>
                         <Talents talents={data.talents}/>
                     </div>
-                    {/*<div className='col bg-primary-subtle'>hi</div>*/}
                 </div>
             </div>
         }</>

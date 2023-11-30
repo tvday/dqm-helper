@@ -20,8 +20,6 @@ const columns: Column<Row>[] = [
 const TalentTabContent = ({talent, index}: TalentTanContentProps) => {
     const [rows, updateRows] = useState<Row[]>([])
 
-    console.log(rows)
-
     useEffect(() => {
         let rows = Array<Row>().concat(
             talent.skills?.map((skill): Row => {
@@ -54,8 +52,8 @@ const TalentTabContent = ({talent, index}: TalentTanContentProps) => {
         >
             <Table caption={
                 talent.isInherent
-                    ? "This trait is inherent."
-                    : "This trait is random on scout."
+                    ? "This talent is inherent."
+                    : "This talent is random on scout."
             }
                    data={rows}
                    columns={columns}
@@ -100,18 +98,23 @@ const Talents = ({talents}: TalentsProps) => {
             <div className='h3'>
                 Talents
             </div>
-            <nav>
-                <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                    {talents.map((talent, index) => {
-                        return <TalentTab name={talent.name} slug={talent.slug} index={index} key={index}/>;
-                    })}
-                </div>
-            </nav>
-            <div className="tab-content" id="nav-tabContent">
-                {talents.map((talent, index) => {
-                    return <TalentTabContent talent={talent} index={index} key={index}/>;
-                })}
-            </div>
+            {talents
+                ? <>
+                    <nav>
+                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                            {talents.map((talent, index) => {
+                                return <TalentTab name={talent.name} slug={talent.slug} index={index} key={index}/>;
+                            })}
+                        </div>
+                    </nav>
+                    <div className="tab-content" id="nav-tabContent">
+                        {talents.map((talent, index) => {
+                            return <TalentTabContent talent={talent} index={index} key={index}/>;
+                        })}
+                    </div>
+                </>
+                : <div>Error Loading Talents...</div>
+            }
         </div>
     );
 };

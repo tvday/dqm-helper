@@ -2,22 +2,22 @@ import {MonsterData} from "../../interfaces/monster";
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faStar} from "@fortawesome/free-solid-svg-icons";
+import {GrowthRateData} from "../../interfaces/growthRate";
 
 interface GrowthRateCardProps {
-    name: string
-    growthRate: number
+    growthRate: GrowthRateData
 }
 
-const GrowthRateCard = ({name, growthRate}: GrowthRateCardProps) => {
+const GrowthRateCard = ({growthRate}: GrowthRateCardProps) => {
     return (
         <div className='col'>
             <div className="card">
                 <div className="card-header">
-                    {name}
+                    {growthRate.name}
                 </div>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item text-center">
-                        {getStars(growthRate)}
+                        {getStars(growthRate.growthRate)}
                     </li>
                 </ul>
             </div>
@@ -26,22 +26,19 @@ const GrowthRateCard = ({name, growthRate}: GrowthRateCardProps) => {
 };
 
 interface GrowthRatesProps {
-    data: MonsterData
+    growthRates: GrowthRateData[]
 }
 
-const GrowthRates = ({data}: GrowthRatesProps) => {
+const GrowthRates = ({growthRates}: GrowthRatesProps) => {
     return (
         <div className='container'>
             <div className='h3'>Growth Rates</div>
-
-            <div className='row row-cols-3 g-3'>
-                <GrowthRateCard name='HP' growthRate={data.growthRateHP}/>
-                <GrowthRateCard name='MP' growthRate={data.growthRateMP}/>
-                <GrowthRateCard name='Attack' growthRate={data.growthRateAttack}/>
-                <GrowthRateCard name='Defence' growthRate={data.growthRateDefense}/>
-                <GrowthRateCard name='Agility' growthRate={data.growthRateAgility}/>
-                <GrowthRateCard name='Wisdom' growthRate={data.growthRateWisdom}/>
-            </div>
+            {growthRates
+                ? <div className='row row-cols-3 g-3'>
+                    {growthRates.map((gr, index) => <GrowthRateCard growthRate={gr} key={index}/>)}
+                </div>
+                : <div>Error Loading Growth Rates...</div>
+            }
         </div>
     );
 };

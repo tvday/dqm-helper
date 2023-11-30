@@ -1,5 +1,7 @@
 import {MonsterTraitData} from "./trait";
 import {TalentData} from "./talent";
+import {ResistanceData} from "./resistance";
+import {GrowthRateData} from "./growthRate";
 
 export interface MonsterSimpleData {
     id: number
@@ -20,32 +22,8 @@ export interface MonsterData {
     family: string
     imgURL: string
 
-    growthRateHP: number
-    growthRateMP: number
-    growthRateAttack: number
-    growthRateDefense: number
-    growthRateAgility: number
-    growthRateWisdom: number
-
-    resistanceFire: string
-    resistanceWater: string
-    resistanceWind: string
-    resistanceEarth: string
-    resistanceExplosions: string
-    resistanceIce: string
-    resistanceElectricity: string
-    resistanceLight: string
-    resistanceDark: string
-    resistanceDebilitation: string
-    resistanceBedazzlement: string
-    resistanceAntimagic: string
-    resistanceMpAbsorption: string
-    resistanceConfusion: string
-    resistanceSleep: string
-    resistanceParalysis: string
-    resistanceStun: string
-    resistancePoison: string
-    resistanceInstantDeath: string
+    growthRates: GrowthRateData[]
+    resistances: ResistanceData[]
 
     traits: MonsterTraitData[]
     talents: TalentData[]
