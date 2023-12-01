@@ -41,7 +41,7 @@ func (s *Service) QueryFamily(data models.Family) (*FamilyOutput, error) {
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
 func (s *Service) getFamilyData(data ...models.Family) ([]FamilyOutput, error) {
-	query := util.NewQuery(`SELECT name, family_id, slug FROM family`).OrderBy("family_id")
+	query := util.NewQuery(`SELECT name, family_id, slug, img_slug FROM family`).OrderBy("family_id")
 
 	if len(data) == 0 {
 		// do nothing
@@ -64,7 +64,7 @@ func (s *Service) getFamilyData(data ...models.Family) ([]FamilyOutput, error) {
 	var families []FamilyOutput
 	for rows.Next() {
 		var family FamilyOutput
-		if err := rows.Scan(&family.Name, &family.ID, &family.Slug); err != nil {
+		if err := rows.Scan(&family.Name, &family.ID, &family.Slug, &family.ImageSlug); err != nil {
 			// record not found
 			return nil, err
 		}

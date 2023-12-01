@@ -1,7 +1,7 @@
 import {MonsterData} from "../../interfaces/monster";
 import React from "react";
 import {ResistanceData} from "../../interfaces/resistance";
-import {ImageBase} from "../../utils/api";
+import {IconsURL} from "../../utils/api";
 
 interface ResistanceProps {
     name: string
@@ -11,7 +11,8 @@ interface ResistanceProps {
 const Resistance = ({name, img}: ResistanceProps) => {
     return (
         <div className='badge rounded-pill text-bg-dark'>
-            <img src={`${ImageBase}/${img}`}/> {name}
+            <img src={`${IconsURL}/${img}`} alt={`${name} icon`} className='mx-1'/>
+            <span>{name}</span>
         </div>
     );
 };

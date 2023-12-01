@@ -12,18 +12,18 @@ interface TableFiltersProps<T> {
 
 
 const FilterGroup = <T, >(props: FilterGroupProps<T>) => {
-    const {label, accessor, values} = props.data
+    const {title, accessor, values, labels} = props.data
 
     return (
         <>
-            <div>{label}</div>
+            <div>{title}</div>
             <div className="btn-toolbar">
                 {values.map((value, index) => {
                     return <div key={index}>
                         <input
                             type='checkbox'
                             className='btn-check'
-                            id={'btn-check-' + label + '-' + index}
+                            id={'btn-check-' + title + '-' + index}
                             autoComplete='off'
                             onChange={(event) => {
                                 props.onFilterChange(accessor, value, event.target.checked)
@@ -31,9 +31,9 @@ const FilterGroup = <T, >(props: FilterGroupProps<T>) => {
                         />
                         <label
                             className="btn btn-primary"
-                            htmlFor={'btn-check-' + label + '-' + index}
+                            htmlFor={'btn-check-' + title + '-' + index}
                         >
-                            {value}
+                            {labels[index]}
                         </label>
                     </div>;
                 })}

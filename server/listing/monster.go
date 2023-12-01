@@ -58,7 +58,7 @@ func (s *Service) QueryMonster(data models.Monster) (*MonsterOutput, error) {
 // A struct with no non-default fields will return an error.
 func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]MonsterOutput, error) {
 	query := util.NewQuery(`
-			SELECT m.name as name, monster_id, entry_no, f.name as family, r.name as rank, m.slug, image
+			SELECT m.name as name, monster_id, entry_no, f.name as family, f.img_slug, r.name as rank, m.slug, image
 			FROM monster m
 			JOIN family f ON m.family_id = f.family_id
 			JOIN rank r ON m.rank_id = r.rank_id `)
@@ -84,7 +84,7 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]Monster
 	var monsters []MonsterOutput
 	for rows.Next() {
 		var m MonsterOutput
-		if err := rows.Scan(&m.Name, &m.ID, &m.MonsterNo, &m.Family, &m.Rank, &m.Slug, &m.ImageURL); err != nil {
+		if err := rows.Scan(&m.Name, &m.ID, &m.MonsterNo, &m.Family, &m.FamilyImageSlug, &m.Rank, &m.Slug, &m.ImageURL); err != nil {
 			return nil, err
 		}
 
@@ -103,7 +103,7 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]Monster
 			if err != nil {
 				return nil, err
 			}
-			
+
 			m.Talents, err = s.GetTalentsOfMonsterDetailed(m.ID)
 			if err != nil {
 				return nil, err

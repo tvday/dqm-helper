@@ -1,6 +1,6 @@
 import TableHead from "../table/TableHead";
 import TableBody from "../table/TableBody";
-import {useEffect, useState} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import {tableSort, Sorter} from "../../utils/tableSort";
 import {tableFilter, Filter} from "../../utils/tableFilter";
 import TableFilters from "../table/TableFilters";
@@ -16,8 +16,9 @@ export interface Column<T> {
 }
 
 export interface FilterGroup<T> {
-    label: string
+    title: string
     accessor: keyof T
+    labels: string[] | ReactElement[]
     values: any[]
 }
 

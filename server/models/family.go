@@ -1,9 +1,8 @@
 package models
 
 type Family struct {
-	ID      int    `json:"ID,omitempty"`
-	Name    string `json:"name,omitempty"`
-	Slug    string `json:"slug,omitempty"`
-	AltName string `json:"altName,omitempty"`
-	//Monsters []Monster `json:"monster,omitempty"`
+	ID        int    `json:"ID,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Slug      string `json:"slug,omitempty"`
+	ImageSlug string `json:"imageSlug,omitempty"`
 }

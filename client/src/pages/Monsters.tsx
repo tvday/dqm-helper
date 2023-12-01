@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Table, {Column, FilterGroup} from "../components/table/Table";
 import {MonsterSimpleData} from "../interfaces/monster";
-import {APIBase} from "../utils/api";
+import {APIBase, IconsURL} from "../utils/api";
+import FamilyIcon from "../components/FamilyIcon";
 
 const columns: Column<MonsterSimpleData>[] = [
     {label: "Image", accessor: "imgURL", sortable: false, searchable: false},
@@ -13,14 +14,25 @@ const columns: Column<MonsterSimpleData>[] = [
 
 const filters: FilterGroup<MonsterSimpleData>[] = [
     {
-        label: 'Rank',
+        title: 'Rank',
         accessor: 'rank',
-        values: ['G', 'F', 'E', 'D', 'C', 'B', 'A', 'S', 'X']
+        values: ['G', 'F', 'E', 'D', 'C', 'B', 'A', 'S', 'X'],
+        labels: ['G', 'F', 'E', 'D', 'C', 'B', 'A', 'S', 'X']
     },
     {
-        label: 'Family',
+        title: 'Family',
         accessor: 'family',
-        values: ['Slime', 'Dragon', 'Nature', 'Beast', 'Material', 'Demon', 'Undead', '???']
+        values: ['Slime', 'Dragon', 'Nature', 'Beast', 'Material', 'Demon', 'Undead', '???'],
+        labels: [
+            <FamilyIcon iconURL={`${IconsURL}/slime.png`} name='Slime'/>,
+            <FamilyIcon iconURL={`${IconsURL}/dragon.png`} name='Dragon'/>,
+            <FamilyIcon iconURL={`${IconsURL}/nature.png`} name='Nature'/>,
+            <FamilyIcon iconURL={`${IconsURL}/beast.png`} name='Beast'/>,
+            <FamilyIcon iconURL={`${IconsURL}/material.png`} name='Material'/>,
+            <FamilyIcon iconURL={`${IconsURL}/demon.png`} name='Demon'/>,
+            <FamilyIcon iconURL={`${IconsURL}/undead.png`} name='Undead'/>,
+            <FamilyIcon iconURL={`${IconsURL}/boss.png`} name='???'/>
+        ]
     }
 ]
 
