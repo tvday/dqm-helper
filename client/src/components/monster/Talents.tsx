@@ -1,17 +1,27 @@
 import 'bootstrap/dist/js/bootstrap'
 import {TalentData} from "../../interfaces/talent";
-import {useEffect, useState} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import Table, {Column} from "../table/Table";
+import {IconsURL} from "../../utils/api";
+import Icon from "../Icon";
 
 interface Row {
     name: string
+    iconSlug: string | null
     desc: string
     mp: number | null
     points: number
 }
 
+const transName = (row: Row) => {
+    // console.log(row)
+    return row.iconSlug
+        ? <Icon name={row.name} iconURL={`${IconsURL}/${row.iconSlug}`}/>
+        : row.name
+}
+
 const columns: Column<Row>[] = [
-    {label: "Name", accessor: "name"},
+    {label: "Name", accessor: "name", displayTransformation: transName},
     {label: "Description", accessor: "desc"},
     {label: "MP", accessor: "mp"},
     {label: "Required Points", accessor: "points"}
@@ -23,10 +33,16 @@ const TalentTabContent = ({talent, index}: TalentTanContentProps) => {
     useEffect(() => {
         let rows = Array<Row>().concat(
             talent.skills?.map((skill): Row => {
-                return {name: skill.name, desc: skill.description, mp: skill.mpCost, points: skill.requiredPoints}
+                return {
+                    name: skill.name,
+                    iconSlug: skill.skillTypeImageSlug,
+                    desc: skill.description,
+                    mp: skill.mpCost,
+                    points: skill.requiredPoints,
+                }
             }),
             talent.traits?.map((trait): Row => {
-                return {name: trait.name, desc: trait.description, mp: null, points: trait.requiredPoints}
+                return {name: trait.name, iconSlug: null, desc: trait.description, mp: null, points: trait.requiredPoints}
             })
         )
             .filter((val) => val !== undefined)

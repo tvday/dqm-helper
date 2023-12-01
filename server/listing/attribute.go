@@ -18,6 +18,7 @@ func (s *Service) GetAttributesOfMonster(monsterID int) ([]AttributeOutput, erro
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var result []AttributeOutput
 	for rows.Next() {

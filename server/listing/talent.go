@@ -64,10 +64,10 @@ func (s *Service) getTalentData(data ...models.Talent) ([]TalentOutput, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var talents []TalentOutput
 
@@ -147,10 +147,11 @@ func (s *Service) getTalentDataOfMonster(monsterID int) ([]MonsterTalentOutput, 
 		SELECT name, t.talent_id, is_inherent, slug 
 		FROM talent t JOIN monster_talent mt ON t.talent_id = mt.talent_id
 		WHERE monster_id = $1;`, monsterID)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
+
 	for rows.Next() {
 		var talent MonsterTalentOutput
 		if err := rows.Scan(&talent.Name, &talent.ID, &talent.IsInherent, &talent.Slug); err != nil {

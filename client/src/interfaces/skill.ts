@@ -5,4 +5,6 @@ export interface SkillData {
     description: string
     requiredPoints: number
     mpCost: number
+    skillType: string
+    skillTypeImageSlug: string
 }

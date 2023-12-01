@@ -76,10 +76,10 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]Monster
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var monsters []MonsterOutput
 	for rows.Next() {

@@ -30,17 +30,19 @@ const convertURL = <T, >(url: string, data: T): string => {
 const TableBody = <T, >(props: TableBodyProps<T>) => {
     return (
         <tbody className="table-group-divider">
-        {props.tableData.map((data, index) => {
+        {props.tableData.map((row, index) => {
             return (
                 <tr key={index}>
-                    {props.columns.map(({accessor, link}) => {
-                        const cellData = data[accessor]?.toString()
-                        return link
-                            ? <td key={accessor.toString()}>
-                                <Link to={convertURL(link, data)}
-                                      className="link-dark">{cellData ? cellData : "——"}</Link>
-                            </td>
-                            : <td key={accessor.toString()}>{cellData ? cellData : "——"}</td>;
+                    {props.columns.map(({accessor, displayTransformation, link}) => {
+                        const cellData = row[accessor]?.toString()
+                        return displayTransformation
+                            ? <td key={accessor.toString()}>{displayTransformation(row)}</td>
+                            : link
+                                ? <td key={accessor.toString()}>
+                                    <Link to={convertURL(link, row)}
+                                          className="link-dark">{cellData ? cellData : "——"}</Link>
+                                </td>
+                                : <td key={accessor.toString()}>{cellData ? cellData : "——"}</td>;
 
                     })}
                 </tr>

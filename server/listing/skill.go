@@ -21,18 +21,19 @@ func (s *Service) GetSkillsOfTalent(talentID int) ([]TalentSkillOutput, error) {
 	var skills []TalentSkillOutput
 
 	rows, err := s.db.Query(`
-		SELECT name, s.skill_id, mp_cost, description, required_points, slug
-       	FROM skill s JOIN talent_skill ts ON s.skill_id = ts.skill_id
+		SELECT s.name, s.skill_id, mp_cost, description, required_points, slug, st.name, st.img_slug
+       	FROM skill s JOIN talent_skill ts ON s.skill_id = ts.skill_id JOIN skill_type st ON s.skill_type_id = st.skill_type_id
        	WHERE talent_id = $1
-       	ORDER BY required_points, name;`, talentID)
-	defer rows.Close()
+       	ORDER BY required_points, s.name;`, talentID)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var skill TalentSkillOutput
-		if err := rows.Scan(&skill.Name, &skill.ID, &skill.MPCost, &skill.Description, &skill.RequiredPoints, &skill.Slug); err != nil {
+		if err := rows.Scan(&skill.Name, &skill.ID, &skill.MPCost, &skill.Description,
+			&skill.RequiredPoints, &skill.Slug, &skill.SkillType, &skill.SkillTypeImageSlug); err != nil {
 			return nil, err
 		}
 		skills = append(skills, skill)
@@ -74,7 +75,9 @@ func (s *Service) QuerySkill(data models.Skill) (*SkillOutput, error) {
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
 func (s *Service) getSkillData(data ...models.Skill) ([]SkillOutput, error) {
-	query := util.NewQuery(`SELECT name, skill_id, mp_cost, description, slug FROM skill`)
+	query := util.NewQuery(`
+		SELECT s.name, skill_id, mp_cost, description, slug, st.name, st.img_slug
+		FROM skill s JOIN skill_type st ON s.skill_type_id = st.skill_type_id`)
 
 	if len(data) == 0 {
 		// do nothing
@@ -89,15 +92,16 @@ func (s *Service) getSkillData(data ...models.Skill) ([]SkillOutput, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var skills []SkillOutput
 	for rows.Next() {
 		var skill SkillOutput
-		if err := rows.Scan(&skill.Name, &skill.ID, &skill.MPCost, &skill.Description, &skill.Slug); err != nil {
+		if err := rows.Scan(&skill.Name, &skill.ID, &skill.MPCost, &skill.Description, &skill.Slug,
+			&skill.SkillType, &skill.SkillTypeImageSlug); err != nil {
 			// record not found
 			return nil, err
 		}

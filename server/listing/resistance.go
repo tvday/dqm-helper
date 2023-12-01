@@ -19,6 +19,7 @@ func (s *Service) GetResistancesOfMonster(monsterID int) ([]ResistanceOutput, er
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var result []ResistanceOutput
 	for rows.Next() {

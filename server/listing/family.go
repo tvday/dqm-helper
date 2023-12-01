@@ -56,10 +56,10 @@ func (s *Service) getFamilyData(data ...models.Family) ([]FamilyOutput, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var families []FamilyOutput
 	for rows.Next() {

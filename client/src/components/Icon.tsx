@@ -1,12 +1,12 @@
 import {IconsURL} from "../utils/api";
 import React from "react";
 
-interface FamilyIconProps {
+interface IconProps {
     iconURL: string
     name: string
 }
 
-const FamilyIcon = ({iconURL, name}: FamilyIconProps) => {
+const Icon = ({iconURL, name}: IconProps) => {
     return (
         <div>
             <img src={iconURL} alt={`${name} icon`}
@@ -17,4 +17,4 @@ const FamilyIcon = ({iconURL, name}: FamilyIconProps) => {
     );
 };
 
-export default FamilyIcon;
+export default Icon;

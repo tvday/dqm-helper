@@ -7,11 +7,21 @@ import TableFilters from "../table/TableFilters";
 import TableSearch from "../table/TableSearch";
 import {tableSearch, Searcher} from "../../utils/tableSearch";
 
+
 export interface Column<T> {
+    // Title of column.
     label: string,
+    // Key of the data where the column data is.
     accessor: keyof T
+    // Optionally used to transform the column data when displaying.
+    displayTransformation?: (row: T) => string | ReactElement
+    // Dictates if column can be sorted.
     sortable?: boolean
+    // Dictates if data is included in search filtering.
     searchable?: boolean
+    // Add dynamic link to displayed data.
+    //  Not used if displayTransformation is also supplied.
+    //  Format: "/url/[<accessor>]" where <accessor> is a key of the data.
     link?: string
 }
 

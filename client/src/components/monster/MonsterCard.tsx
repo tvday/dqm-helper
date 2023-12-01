@@ -1,7 +1,7 @@
 import React from "react";
 import {MonsterData} from "../../interfaces/monster";
 import {IconsURL} from "../../utils/api";
-import FamilyIcon from "../FamilyIcon";
+import Icon from "../Icon";
 
 interface MonsterCardProps {
     data: MonsterData
@@ -25,7 +25,7 @@ const MonsterCard = ({data}: MonsterCardProps) => {
                 <div className='row h5'>
                     <div className='col fst-italic'>Family</div>
                     <div className='col text-end align-middle'>
-                        <FamilyIcon iconURL={`${IconsURL}/${data.familyImageSlug}`} name={data.family}/>
+                        <Icon iconURL={`${IconsURL}/${data.familyImageSlug}`} name={data.family}/>
                     </div>
                 </div>
                 <div className='row h5'>
