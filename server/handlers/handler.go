@@ -17,6 +17,7 @@ func Handler(l listing.Service, a adding.Service) *gin.Engine {
 	router.Use(static.Serve("/", static.LocalFile("./client/build", true)))
 
 	//router.GET("/", homePage)
+	router.Static("/images", "./assets")
 
 	group := router.Group("api/v1")
 	{

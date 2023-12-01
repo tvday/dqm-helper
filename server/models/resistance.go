@@ -1,8 +1,9 @@
 package models
 
 type DamageType struct {
-	Name string `json:"damageType,omitempty"`
-	ID   int    `json:"damageTypeID,omitempty"`
+	Name      string `json:"damageType,omitempty"`
+	ID        int    `json:"damageTypeID,omitempty"`
+	ImageSlug string `json:"imageSlug,omitempty"`
 }
 
 type Resistance struct {
