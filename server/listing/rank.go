@@ -56,10 +56,10 @@ func (s *Service) getRankData(data ...models.Rank) ([]RankOutput, error) {
 	}
 
 	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	var ranks []RankOutput
 	for rows.Next() {

@@ -10,6 +10,7 @@ export interface MonsterSimpleData {
     slug: string
     rank: string
     family: string
+    familyImageSlug: string
     imgURL: string
 }
 
@@ -20,6 +21,7 @@ export interface MonsterData {
     slug: string
     rank: string
     family: string
+    familyImageSlug: string
     imgURL: string
 
     growthRates: GrowthRateData[]

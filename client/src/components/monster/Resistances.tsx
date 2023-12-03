@@ -1,15 +1,18 @@
 import {MonsterData} from "../../interfaces/monster";
 import React from "react";
 import {ResistanceData} from "../../interfaces/resistance";
+import {IconsURL} from "../../utils/api";
 
 interface ResistanceProps {
     name: string
+    img: string
 }
 
-const Resistance = ({name}: ResistanceProps) => {
+const Resistance = ({name, img}: ResistanceProps) => {
     return (
         <div className='badge rounded-pill text-bg-dark'>
-            {name}
+            <img src={`${IconsURL}/${img}`} alt={`${name} icon`} className='mx-1'/>
+            <span>{name}</span>
         </div>
     );
 };
@@ -27,7 +30,7 @@ const ResistanceGroup = ({resistances, strengthCaption, strengthValue}: Resistan
             <div className='list-group-item flex-fill'>
                 {resistances
                     .filter((res) => res.value === strengthValue)
-                    .map((res, index) => <Resistance name={res.damageType} key={index}/>)
+                    .map((res, index) => <Resistance name={res.damageType} img={res.imageSlug} key={index}/>)
                 }
             </div>
         </div>
