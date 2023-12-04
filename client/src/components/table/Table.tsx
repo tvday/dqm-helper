@@ -10,15 +10,27 @@ import {tableSearch, Searcher} from "../../utils/tableSearch";
 
 export interface Column<T> {
     // Title of column.
-    label: string,
-    // Key of the data where the column data is.
+    label: string
+    // Key of data for the column.
     accessor: keyof T
     // Optionally used to transform the column data when displaying.
-    displayTransformation?: (row: T) => string | ReactElement
+    displayFunc?: (row: T) => string | ReactElement
+    // Optional, set false to not display column.
+    display?: boolean
     // Dictates if column can be sorted.
     sortable?: boolean
     // Dictates if data is included in search filtering.
     searchable?: boolean
+    /**
+     * Optional custom search function for filtering during search.
+     * Return false if row should be filtered out.
+     * @template T
+     * @param obj {T[keyof T]} property at T[accessor]
+     * @param value {string} current search parameter
+     *
+     * @returns {boolean}
+     */
+    searchFunc?: (obj: T[keyof T], value: string) => boolean
     // Add dynamic link to displayed data.
     //  Not used if displayTransformation is also supplied.
     //  Format: "/url/[<accessor>]" where <accessor> is a key of the data.
@@ -43,19 +55,19 @@ interface TableProps<T> {
 
 const Table = <T, >(props: TableProps<T>) => {
     const [tableData, setTableData] = useState<T[]>(props.data);
-
     const [activeSorter, setActiveSorter] = useState<Sorter<T>>({
         accessor: '' as keyof T,
         order: "asc"
-    })
+    });
     const [activeSearcher, setActiveSearch] = useState<Searcher<T>>({
         value: '',
-        accessors: props.columns
+        params: props.columns
             .filter(col => col.searchable)
-            .map(({accessor}) => accessor)
-    })
-    const [activeFilters, setActiveFilters] = useState<Filter<T>[]>([])
-
+            .map(({accessor, searchFunc}) => {
+                return {accessor: accessor, searchFunc: searchFunc}
+            })
+    });
+    const [activeFilters, setActiveFilters] = useState<Filter<T>[]>([]);
 
     // update data based on filters and sorting
     useEffect(() => {
@@ -97,7 +109,7 @@ const Table = <T, >(props: TableProps<T>) => {
             {props.search && <TableSearch
                 onSearchChange={(query =>
                     setActiveSearch({
-                        accessors: activeSearcher.accessors,
+                        params: activeSearcher.params,
                         value: query
                     }))}
             />}

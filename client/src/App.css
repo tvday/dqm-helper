@@ -1,3 +1,7 @@
+.show-hide-button {
+    transition: none !important; transition-delay: 0s;
+}
+
 /*.App {*/
 /*  text-align: center;*/
 /*}*/

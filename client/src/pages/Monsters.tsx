@@ -5,13 +5,13 @@ import {APIBase, IconsURL} from "../utils/api";
 import Icon from "../components/Icon";
 import {Link} from "react-router-dom";
 
-const transName = (row: MonsterSimpleData) => {
+const displayName = (row: MonsterSimpleData) => {
     return <Link to={`/monsters/${row.slug}`} className='link-dark'>{row.name}</Link>
 }
 
 const columns: Column<MonsterSimpleData>[] = [
     {label: "Image", accessor: "imgURL", sortable: false, searchable: false},
-    {label: "Name", accessor: "name", displayTransformation: transName, sortable: true, searchable: true/**, link: '/monsters/[slug]'*/},
+    {label: "Name", accessor: "name", displayFunc: displayName, sortable: true, searchable: true/**, link: '/monsters/[slug]'*/},
     {label: "Monster No.", accessor: "monsterNo", sortable: true, searchable: false},
     {label: "Rank", accessor: "rank", sortable: true, searchable: false},
     {label: "Family", accessor: "family", sortable: true, searchable: false},

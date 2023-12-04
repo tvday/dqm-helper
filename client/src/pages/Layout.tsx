@@ -13,7 +13,7 @@ const Layout = () => {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/monsters">Monsters</Nav.Link>
-                            {/*<Nav.Link as={Link} to="/custom-table">Custom Table</Nav.Link>*/}
+                            <Nav.Link as={Link} to="/talents">Talents</Nav.Link>
                             <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
