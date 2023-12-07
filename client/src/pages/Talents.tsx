@@ -1,13 +1,13 @@
 import Table, {Column} from "../components/table/Table";
 import {TalentData} from "../interfaces/talent";
 import React, {useEffect, useState} from "react";
-import {APIBase} from "../utils/api";
+import {APIBase, fetchData} from "../utils/api";
 import {TalentSkillData} from "../interfaces/skill";
 import {TraitData} from "../interfaces/trait";
 import Talent from "../components/Talent";
 
 const columns: Column<TalentData>[] = [
-    {label: 'Name', accessor: 'name', link: '/talents/[slug]'},
+    {label: 'Name', accessor: 'name', link: '/talents/[slug]', searchable: true},
     {
         label: 'Skills and Traits', accessor: "id",
         displayFunc: (cell) => {
@@ -62,25 +62,7 @@ const Talents = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(APIBase + '/talents')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`error status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((resData) => {
-                setData(resData);
-                setError(null);
-            })
-            .catch((err) => {
-                console.log(err.message);
-                setError(err.message);
-                setData([]);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        fetchData('/talents', [], setData, setLoading, setError)
     }, []);
 
     return (

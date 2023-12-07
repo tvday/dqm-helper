@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {MonsterData, MonsterSimpleData} from "../interfaces/monster";
-import {APIBase} from "../utils/api";
+import {APIBase, fetchData} from "../utils/api";
 import Table, {Column} from "../components/table/Table";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -12,40 +12,18 @@ import Resistances from "../components/monster/Resistances";
 import Traits from "../components/monster/Traits";
 import Talents from "../components/monster/Talents";
 
-type MonsterParams = {
-    slug: string
-};
-
 const Monster = () => {
-    const [data, setData] = useState<MonsterData>();
+    const [data, setData] = useState<MonsterData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const {slug} = useParams<MonsterParams>()
+    const {slug} = useParams()
     if (slug === undefined) {
         throw new Error('undefined monster')
     }
 
     useEffect(() => {
-        fetch(APIBase + `/monsters/${slug}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`error status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((resData) => {
-                setData(resData);
-                setError(null);
-            })
-            .catch((err) => {
-                console.log(err.message);
-                setError(err.message);
-                setData(undefined);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        fetchData(`/monsters/${slug}`, null, setData, setLoading, setError)
     }, []);
 
     return (

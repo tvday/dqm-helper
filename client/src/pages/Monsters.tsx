@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Table, {Column, FilterGroup} from "../components/table/Table";
 import {MonsterSimpleData} from "../interfaces/monster";
-import {APIBase, IconsURL} from "../utils/api";
+import {fetchData, IconsURL} from "../utils/api";
 import Icon from "../components/Icon";
 import {Link} from "react-router-dom";
 
@@ -47,25 +47,7 @@ const Monsters = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(APIBase + '/monsters')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`error status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((resData) => {
-                setData(resData);
-                setError(null);
-            })
-            .catch((err) => {
-                console.log(err.message);
-                setError(err.message);
-                setData([]);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        fetchData('/monsters', [], setData, setLoading, setError)
     }, []);
 
     return (
