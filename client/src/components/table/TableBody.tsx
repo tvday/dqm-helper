@@ -33,10 +33,11 @@ const TableBody = <T, >(props: TableBodyProps<T>) => {
         {props.tableData.map((row, index) => {
             return (
                 <tr key={index}>
-                    {props.columns.map(({accessor, displayTransformation, link}) => {
+                    {props.columns.map(({accessor, displayFunc, display, link}) => {
+                        if (display === false) return
                         const cellData = row[accessor]?.toString()
-                        return displayTransformation
-                            ? <td key={accessor.toString()}>{displayTransformation(row)}</td>
+                        return displayFunc
+                            ? <td key={accessor.toString()}>{displayFunc(row)}</td>
                             : link
                                 ? <td key={accessor.toString()}>
                                     <Link to={convertURL(link, row)}

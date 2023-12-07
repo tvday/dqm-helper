@@ -1,4 +1,4 @@
-import {SkillData} from "./skill";
+import {TalentSkillData} from "./skill";
 import {TalentTraitData} from "./trait";
 
 export interface TalentData {
@@ -6,6 +6,6 @@ export interface TalentData {
     slug: string
     id: number
     isInherent: boolean
-    skills: SkillData[]
+    skills: TalentSkillData[]
     traits: TalentTraitData[]
 }

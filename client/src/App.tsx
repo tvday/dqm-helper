@@ -8,6 +8,8 @@ import Contact from "./pages/Contact";
 import NoPage from "./pages/NoPage";
 import Home from "./pages/Home";
 import Monster from "./pages/Monster";
+import Talents from "./pages/Talents";
+import Talent from "./pages/Talent";
 // import Table from "./components/Table";
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
                       <Route index element={<Home/>}/>
                       <Route path="monsters" element={<Monsters/>}/>
                       <Route path="monsters/:slug" element={<Monster/>}/>
+                      <Route path="talents" element={<Talents/>}/>
+                      <Route path="talents/:slug" element={<Talent/>}/>
                       <Route path="contact" element={<Contact/>}/>
                       <Route path="*" element={<NoPage/>}/>
                   </Route>

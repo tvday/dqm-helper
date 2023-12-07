@@ -1,64 +1,7 @@
-import 'bootstrap/dist/js/bootstrap'
 import {TalentData} from "../../interfaces/talent";
-import {ReactElement, useEffect, useState} from "react";
-import Table, {Column} from "../table/Table";
-import {IconsURL} from "../../utils/api";
-import Icon from "../Icon";
-
-interface Row {
-    name: string
-    iconSlug: string | null
-    desc: string
-    mp: number | null
-    points: number
-}
-
-const transName = (row: Row) => {
-    // console.log(row)
-    return row.iconSlug
-        ? <Icon name={row.name} iconURL={`${IconsURL}/${row.iconSlug}`}/>
-        : row.name
-}
-
-const columns: Column<Row>[] = [
-    {label: "Name", accessor: "name", displayTransformation: transName},
-    {label: "Description", accessor: "desc"},
-    {label: "MP", accessor: "mp"},
-    {label: "Required Points", accessor: "points"}
-]
+import Talent from "../Talent";
 
 const TalentTabContent = ({talent, index}: TalentTanContentProps) => {
-    const [rows, updateRows] = useState<Row[]>([])
-
-    useEffect(() => {
-        let rows = Array<Row>().concat(
-            talent.skills?.map((skill): Row => {
-                return {
-                    name: skill.name,
-                    iconSlug: skill.skillTypeImageSlug,
-                    desc: skill.description,
-                    mp: skill.mpCost,
-                    points: skill.requiredPoints,
-                }
-            }),
-            talent.traits?.map((trait): Row => {
-                return {name: trait.name, iconSlug: null, desc: trait.description, mp: null, points: trait.requiredPoints}
-            })
-        )
-            .filter((val) => val !== undefined)
-            .sort((a, b) => {
-                if (a.points < b.points) {
-                    return -1
-                } else if (a.points > b.points) {
-                    return 1
-                } else {
-                    return 0
-                }
-            })
-
-        updateRows(rows)
-    }, [talent.skills, talent.traits]);
-
     return (
         <div className={index === 0 ? "tab-pane fade show active" : "tab-pane fade"}
              id={`nav-${talent.slug}`}
@@ -66,14 +9,11 @@ const TalentTabContent = ({talent, index}: TalentTanContentProps) => {
              aria-labelledby={`nav-tab-${talent.slug}`}
              tabIndex={0}
         >
-            <Table caption={
+            <Talent talent={talent} caption={
                 talent.isInherent
-                    ? "This talent is inherent."
+                    ? "This talent is innate."
                     : "This talent is random on scout."
-            }
-                   data={rows}
-                   columns={columns}
-            />
+            }/>
         </div>
     );
 };

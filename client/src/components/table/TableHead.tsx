@@ -22,7 +22,9 @@ const TableHead = <T, >(props: TableHeadProps<T>) => {
     return (
         <thead>
         <tr>
-            {props.columns.map(({label, accessor, sortable}) => {
+            {props.columns.map(({label, accessor, sortable, display}) => {
+                if (display === false) return;
+
                 const icon = props.activeSorter.accessor === accessor && props.activeSorter.order === "asc"
                     ? faSortUp
                     : props.activeSorter.accessor === accessor && props.activeSorter.order === "desc"
