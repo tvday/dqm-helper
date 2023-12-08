@@ -13,7 +13,49 @@ type MonsterOutput struct {
 	Resistances []ResistanceOutput    `json:"resistances,omitempty"`
 	Traits      []MonsterTraitOutput  `json:"traits,omitempty"`
 	Talents     []MonsterTalentOutput `json:"talents,omitempty"`
+	Locations   []LocationOutput      `json:"locations"`
 	ImageURL    *string               `json:"image,omitempty"`
+}
+
+type MonsterQueryTalentOutput struct {
+	models.Monster
+	ImageURL       *string          `json:"image,omitempty"`
+	TalentIsInnate bool             `json:"TalentIsInnate"`
+	Locations      []LocationOutput `json:"locations"`
+}
+
+func (s *Service) GetMonstersWithTalent(talentID int) ([]MonsterQueryTalentOutput, error) {
+	rows, err := s.db.Query(`
+		SELECT m.name, m.monster_id, entry_no, f.name, f.img_slug, r.name, m.slug, image, mt.is_inherent
+		FROM monster_talent mt
+		JOIN monster m ON mt.monster_id = m.monster_id
+		JOIN family f ON m.family_id = f.family_id
+		JOIN rank r ON m.rank_id = r.rank_id
+		WHERE mt.talent_id = $1`,
+		talentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []MonsterQueryTalentOutput
+	for rows.Next() {
+		var monster MonsterQueryTalentOutput
+		if err := rows.Scan(&monster.Name, &monster.ID, &monster.MonsterNo, &monster.Family, &monster.FamilyImageSlug,
+			&monster.Rank, &monster.Slug, &monster.ImageURL, &monster.TalentIsInnate); err != nil {
+			return nil, err
+		}
+
+		var err error
+		monster.Locations, err = s.GetLocationOfMonster(monster.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, monster)
+	}
+
+	return result, nil
 }
 
 // GetMonsters executes a query to return a list of all monsters in the repository.
@@ -105,6 +147,11 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]Monster
 			}
 
 			m.Talents, err = s.GetTalentsOfMonsterDetailed(m.ID)
+			if err != nil {
+				return nil, err
+			}
+
+			m.Locations, err = s.GetLocationOfMonster(m.ID)
 			if err != nil {
 				return nil, err
 			}

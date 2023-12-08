@@ -10,8 +10,9 @@ import (
 
 type TalentOutput struct {
 	models.Talent
-	Skills []TalentSkillOutput `json:"skills,omitempty"`
-	Traits []TalentTraitOutput `json:"traits,omitempty"`
+	Skills   []TalentSkillOutput        `json:"skills,omitempty"`
+	Traits   []TalentTraitOutput        `json:"traits,omitempty"`
+	Monsters []MonsterQueryTalentOutput `json:"monsters,omitempty"`
 }
 
 type MonsterTalentOutput struct {
@@ -21,21 +22,21 @@ type MonsterTalentOutput struct {
 
 // GetTalents executes a query to return a list of all talents in the repository.
 func (s *Service) GetTalents() ([]TalentOutput, error) {
-	return s.getTalentData()
+	return s.getTalentData(false)
 }
 
 // QueryTalents creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
 func (s *Service) QueryTalents(data models.Talent) ([]TalentOutput, error) {
-	return s.getTalentData(data)
+	return s.getTalentData(false, data)
 }
 
 // QueryTalent creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters.
 // A struct with no non-default fields will return an error.
 func (s *Service) QueryTalent(data models.Talent) (*TalentOutput, error) {
-	result, err := s.getTalentData(data)
+	result, err := s.getTalentData(true, data)
 	if err != nil {
 		return nil, err
 	} else if len(result) > 0 {
@@ -48,7 +49,7 @@ func (s *Service) QueryTalent(data models.Talent) (*TalentOutput, error) {
 // getTalentData creates and executes a query based on the provided data.
 // Use non-default values in data for search parameters. No parameters mean there will be no filters.
 // A struct with no non-default fields will return an error.
-func (s *Service) getTalentData(data ...models.Talent) ([]TalentOutput, error) {
+func (s *Service) getTalentData(monsterDetails bool, data ...models.Talent) ([]TalentOutput, error) {
 	query := util.NewQuery("SELECT name, talent_id, slug FROM talent")
 
 	if len(data) == 0 {
@@ -85,6 +86,13 @@ func (s *Service) getTalentData(data ...models.Talent) ([]TalentOutput, error) {
 		talent.Traits, err = s.GetTraitsOfTalent(talent.ID)
 		if err != nil {
 			return nil, err
+		}
+
+		if monsterDetails {
+			talent.Monsters, err = s.GetMonstersWithTalent(talent.ID)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		talents = append(talents, talent)
