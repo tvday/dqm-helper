@@ -11,6 +11,7 @@ import GrowthRates from "../components/monster/GrowthRates";
 import Resistances from "../components/monster/Resistances";
 import Traits from "../components/monster/Traits";
 import Talents from "../components/monster/Talents";
+import Locations from "../components/monster/Locations";
 
 const Monster = () => {
     const [data, setData] = useState<MonsterData | null>(null);
@@ -27,13 +28,13 @@ const Monster = () => {
     }, []);
 
     return (
-        <>{data &&
-            <div className="container bg-dark-subtle">
-                <div className='row'>
-                    {/*<div className='col bg-danger-subtle'>hi</div>*/}
-                    <div className='col bg-success-subtle'>
-                        <MonsterCard data={data}/>
-                        <br/>
+        <>
+            {data &&
+                <div className="container">
+                    <MonsterCard data={data}/>
+                    <br/>
+
+                    <div className='accordion accordion-flush'>
                         <GrowthRates growthRates={data.growthRates}/>
                         <br/>
                         <Resistances resistances={data.resistances}/>
@@ -41,10 +42,13 @@ const Monster = () => {
                         <Traits traits={data.traits}/>
                         <br/>
                         <Talents talents={data.talents}/>
+                        <br/>
+                        <Locations locations={data.locations}/>
+                        <br/>
                     </div>
                 </div>
-            </div>
-        }</>
+            }
+        </>
     );
 };
 

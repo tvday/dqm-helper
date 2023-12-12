@@ -10,13 +10,14 @@ import (
 
 type TalentOutput struct {
 	models.Talent
-	Skills []TalentSkillOutput `json:"skills,omitempty"`
-	Traits []TalentTraitOutput `json:"traits,omitempty"`
+	Skills   []TalentSkillOutput        `json:"skills,omitempty"`
+	Traits   []TalentTraitOutput        `json:"traits,omitempty"`
+	Monsters []MonsterQueryTalentOutput `json:"monsters,omitempty"`
 }
 
 type MonsterTalentOutput struct {
 	TalentOutput
-	IsInherent bool `json:"isInherent,omitempty"`
+	IsInnate bool `json:"isInnate,omitempty"`
 }
 
 // GetTalents executes a query to return a list of all talents in the repository.
@@ -55,7 +56,7 @@ func (s *Service) getTalentData(data ...models.Talent) ([]TalentOutput, error) {
 		// do nothing
 	} else if len(data) == 1 {
 		var err error
-		query, err = extractTalentPredicates(query, data[0])
+		query, err = extractTalentPredicates(query, data[0], "")
 		if err != nil {
 			return nil, err
 		}
@@ -94,13 +95,17 @@ func (s *Service) getTalentData(data ...models.Talent) ([]TalentOutput, error) {
 }
 
 // extractSkillPredicates looks for non-default fields in data to add WHERE clauses to the query.
-func extractTalentPredicates(q *util.Query, data models.Talent) (*util.Query, error) {
+func extractTalentPredicates(q *util.Query, data models.Talent, alias string) (*util.Query, error) {
+	if alias != "" {
+		alias = alias + "."
+	}
+
 	if data.Name != "" {
-		q = q.Where("name", data.Name)
+		q = q.Where(alias+"name", data.Name)
 	} else if data.Slug != "" {
-		q = q.Where("slug", data.Slug)
+		q = q.Where(alias+"slug", data.Slug)
 	} else if data.ID != 0 {
-		q = q.Where("talent_id", data.ID)
+		q = q.Where(alias+"talent_id", data.ID)
 	} else {
 		// TODO: error about not good search terms
 		return nil, errors.New("TODO: error about not good search terms")
@@ -144,7 +149,7 @@ func (s *Service) GetTalentsOfMonsterDetailed(monsterID int) ([]MonsterTalentOut
 func (s *Service) getTalentDataOfMonster(monsterID int) ([]MonsterTalentOutput, error) {
 	var talents []MonsterTalentOutput
 	rows, err := s.db.Query(`
-		SELECT name, t.talent_id, is_inherent, slug 
+		SELECT name, t.talent_id, is_innate, slug 
 		FROM talent t JOIN monster_talent mt ON t.talent_id = mt.talent_id
 		WHERE monster_id = $1;`, monsterID)
 	if err != nil {
@@ -154,7 +159,7 @@ func (s *Service) getTalentDataOfMonster(monsterID int) ([]MonsterTalentOutput, 
 
 	for rows.Next() {
 		var talent MonsterTalentOutput
-		if err := rows.Scan(&talent.Name, &talent.ID, &talent.IsInherent, &talent.Slug); err != nil {
+		if err := rows.Scan(&talent.Name, &talent.ID, &talent.IsInnate, &talent.Slug); err != nil {
 			return nil, err
 		}
 		talents = append(talents, talent)

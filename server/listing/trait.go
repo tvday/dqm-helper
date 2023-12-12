@@ -13,8 +13,8 @@ type TraitOutput struct {
 
 type MonsterTraitOutput struct {
 	TraitOutput
-	IsLargeTrait  string `json:"isLargeTrait,omitempty"`
-	RequiredLevel *int   `json:"requiredLevel,omitempty"`
+	IsLargeTrait  bool `json:"isLargeTrait"`
+	RequiredLevel *int `json:"requiredLevel,omitempty"`
 }
 
 type TalentTraitOutput struct {

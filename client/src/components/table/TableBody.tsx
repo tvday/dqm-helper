@@ -1,7 +1,6 @@
 import {Column} from "./Table";
 import {Link} from "react-router-dom";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 interface TableBodyProps<T> {
     columns: Column<T>[],
@@ -33,18 +32,20 @@ const TableBody = <T, >(props: TableBodyProps<T>) => {
         {props.tableData.map((row, index) => {
             return (
                 <tr key={index}>
-                    {props.columns.map(({accessor, displayFunc, display, link}) => {
+                    {props.columns.map(({accessor, displayFunc, display, link}, index) => {
                         if (display === false) return
                         const cellData = row[accessor]?.toString()
-                        return displayFunc
-                            ? <td key={accessor.toString()}>{displayFunc(row)}</td>
-                            : link
-                                ? <td key={accessor.toString()}>
-                                    <Link to={convertURL(link, row)}
-                                          className="link-dark">{cellData ? cellData : "——"}</Link>
-                                </td>
-                                : <td key={accessor.toString()}>{cellData ? cellData : "——"}</td>;
-
+                        return (
+                            <td key={index}>
+                                {displayFunc
+                                    ? displayFunc(row)
+                                    : link
+                                        ? <Link to={convertURL(link, row)}
+                                                className="link-dark">{cellData ? cellData : "——"}</Link>
+                                        : cellData ? cellData : "——"
+                                }
+                            </td>
+                        )
                     })}
                 </tr>
             );

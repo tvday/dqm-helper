@@ -1,6 +1,6 @@
 import TableHead from "../table/TableHead";
 import TableBody from "../table/TableBody";
-import {ReactElement, useEffect, useState} from "react";
+import {ReactElement, ReactNode, useEffect, useState} from "react";
 import {tableSort, Sorter} from "../../utils/tableSort";
 import {tableFilter, Filter} from "../../utils/tableFilter";
 import TableFilters from "../table/TableFilters";
@@ -45,7 +45,7 @@ export interface FilterGroup<T> {
 }
 
 interface TableProps<T> {
-    caption?: string
+    caption?: string | ReactNode
     data: T[]
     columns: Column<T>[]
     filters?: FilterGroup<T>[]

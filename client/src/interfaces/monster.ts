@@ -1,7 +1,8 @@
-import {MonsterTraitData} from "./trait";
-import {TalentData} from "./talent";
+import {TraitOfMonsterData} from "./trait";
+import {TalentOfMonsterData} from "./talent";
 import {ResistanceData} from "./resistance";
 import {GrowthRateData} from "./growthRate";
+import {LocationData} from "./location";
 
 export interface MonsterSimpleData {
     id: number
@@ -12,6 +13,20 @@ export interface MonsterSimpleData {
     family: string
     familyImageSlug: string
     imgURL: string
+}
+
+export interface MonsterWithTalentData {
+    id: number
+    name: string
+    monsterNo: number
+    slug: string
+    rank: string
+    family: string
+    familyImageSlug: string
+    imgURL: string
+
+    talentIsInnate: boolean
+    locations: LocationData[]
 }
 
 export interface MonsterData {
@@ -27,6 +42,8 @@ export interface MonsterData {
     growthRates: GrowthRateData[]
     resistances: ResistanceData[]
 
-    traits: MonsterTraitData[]
-    talents: TalentData[]
+    traits: TraitOfMonsterData[]
+    talents: TalentOfMonsterData[]
+
+    locations: LocationData[]
 }
