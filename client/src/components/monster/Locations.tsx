@@ -40,10 +40,13 @@ const Locations = ({locations}: LocationsProps) => {
                 <div className='h3'>Locations</div>
             </AccordionHeader>
             <AccordionBody id={id}>
-                <div className='card-group'>
-                    {locations.map((loc, index) =>
-                        <Location location={loc} key={index}/>)}
-                </div>
+                {locations
+                    ? <div className='card-group'>
+                        {locations.map((loc, index) =>
+                            <Location location={loc} key={index}/>)}
+                    </div>
+                    : <div>Error Loading Locations...</div>
+                }
             </AccordionBody>
         </div>
     );

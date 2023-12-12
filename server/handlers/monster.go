@@ -34,6 +34,19 @@ func getMonster(s listing.Service) func(c *gin.Context) {
 	}
 }
 
+func getParentsOfMonster(s listing.Service) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		monsters, err := s.GetParentsOfMonster(models.Monster{Slug: c.Param("slug")})
+
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.IndentedJSON(http.StatusOK, monsters)
+	}
+}
+
 func addMonster(a adding.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var input adding.MonsterInput
