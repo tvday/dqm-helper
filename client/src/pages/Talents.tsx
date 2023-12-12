@@ -1,12 +1,12 @@
 import Table, {Column} from "../components/table/Table";
-import {TalentData} from "../interfaces/talent";
+import {TalentOfMonsterData} from "../interfaces/talent";
 import React, {useEffect, useState} from "react";
-import {APIBase, fetchData} from "../utils/api";
-import {TalentSkillData} from "../interfaces/skill";
+import {fetchData} from "../utils/api";
+import {SkillOfTalentData} from "../interfaces/skill";
 import {TraitData} from "../interfaces/trait";
-import Talent from "../components/Talent";
+import TalentTable from "../components/TalentTable";
 
-const columns: Column<TalentData>[] = [
+const columns: Column<TalentOfMonsterData>[] = [
     {label: 'Name', accessor: 'name', link: '/talents/[slug]', searchable: true},
     {
         label: 'Skills and Traits', accessor: "id",
@@ -24,7 +24,7 @@ const columns: Column<TalentData>[] = [
                         </p>
                         <div className="collapse" id={`talent-${cell.id}`}>
                             <div className="card card-body">
-                                <Talent talent={cell}/>
+                                <TalentTable talent={cell}/>
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,7 @@ const columns: Column<TalentData>[] = [
     {
         label: 'Skills', accessor: 'skills', searchable: true, display: false,
         searchFunc: (obj, value) => {
-            let skills = obj as TalentSkillData[]
+            let skills = obj as SkillOfTalentData[]
             return skills?.some((elem) => {
                 return elem.name
                     .toLocaleLowerCase('en')
@@ -57,7 +57,7 @@ const columns: Column<TalentData>[] = [
 ]
 
 const Talents = () => {
-    const [data, setData] = useState<TalentData[]>([]);
+    const [data, setData] = useState<TalentOfMonsterData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

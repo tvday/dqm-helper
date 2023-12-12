@@ -1,12 +1,12 @@
-import {useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import Table, {Column} from "./table/Table";
 import Icon from "./Icon";
-import {IconsURL} from "../utils/api";
+import {IconsAPI} from "../utils/api";
 import {TalentData} from "../interfaces/talent";
 
 interface TalentProps {
     talent: TalentData
-    caption?: string
+    caption?: string | ReactNode
 }
 
 interface Row {
@@ -22,7 +22,7 @@ const columns: Column<Row>[] = [
         label: "Name", accessor: "name",
         displayFunc: (row) => {
             return row.iconSlug
-                ? <Icon name={row.name} iconURL={`${IconsURL}/${row.iconSlug}`}/>
+                ? <Icon name={row.name} iconSlug={row.iconSlug} displayName={true}/>
                 : row.name
         }
     },
@@ -31,7 +31,7 @@ const columns: Column<Row>[] = [
     {label: "Required Points", accessor: "points"}
 ]
 
-const Talent = ({talent, caption}: TalentProps) => {
+const TalentTable = ({talent, caption}: TalentProps) => {
     const [rows, updateRows] = useState<Row[]>([])
 
     useEffect(() => {
@@ -74,4 +74,4 @@ const Talent = ({talent, caption}: TalentProps) => {
     );
 };
 
-export default Talent;
+export default TalentTable;

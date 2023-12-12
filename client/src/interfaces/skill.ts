@@ -8,7 +8,7 @@ export interface SkillData {
     skillTypeImageSlug: string
 }
 
-export interface TalentSkillData {
+export interface SkillOfTalentData {
     name: string
     slug: string
     id: number

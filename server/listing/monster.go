@@ -20,19 +20,25 @@ type MonsterOutput struct {
 type MonsterQueryTalentOutput struct {
 	models.Monster
 	ImageURL       *string          `json:"image,omitempty"`
-	TalentIsInnate bool             `json:"TalentIsInnate"`
+	TalentIsInnate bool             `json:"talentIsInnate"`
 	Locations      []LocationOutput `json:"locations"`
 }
 
-func (s *Service) GetMonstersWithTalent(talentID int) ([]MonsterQueryTalentOutput, error) {
-	rows, err := s.db.Query(`
-		SELECT m.name, m.monster_id, entry_no, f.name, f.img_slug, r.name, m.slug, image, mt.is_inherent
-		FROM monster_talent mt
+func (s *Service) GetMonstersWithTalent(talent models.Talent) ([]MonsterQueryTalentOutput, error) {
+	query := util.NewQuery(`
+		SELECT m.name, m.monster_id, m.entry_no, f.name, f.img_slug, r.name, m.slug, image, mt.is_innate
+		FROM talent t
+		JOIN monster_talent mt ON t.talent_id = mt.talent_id
 		JOIN monster m ON mt.monster_id = m.monster_id
 		JOIN family f ON m.family_id = f.family_id
-		JOIN rank r ON m.rank_id = r.rank_id
-		WHERE mt.talent_id = $1`,
-		talentID)
+		JOIN rank r ON m.rank_id = r.rank_id`)
+
+	query, err := extractTalentPredicates(query, talent, "t")
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
 	if err != nil {
 		return nil, err
 	}

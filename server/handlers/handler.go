@@ -35,6 +35,7 @@ func Handler(l listing.Service, a adding.Service) *gin.Engine {
 
 		group.GET("/talents", getTalents(l))
 		group.GET("/talents/:slug", getTalent(l))
+		group.GET("/talents/:slug/monsters", getTalentMonsters(l))
 		group.POST("/talents", addTalent(a))
 
 		group.GET("/ranks", getRanks(l))

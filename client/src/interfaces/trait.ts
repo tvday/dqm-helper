@@ -5,7 +5,7 @@ export interface TraitData {
     description: string
 }
 
-export interface MonsterTraitData {
+export interface TraitOfMonsterData {
     name: string
     slug: string
     id: number
@@ -14,7 +14,7 @@ export interface MonsterTraitData {
     requiredLevel: number
 }
 
-export interface TalentTraitData {
+export interface TraitOfTalentData {
     name: string
     slug: string
     id: number

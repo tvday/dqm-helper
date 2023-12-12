@@ -1,11 +1,20 @@
-import {TalentSkillData} from "./skill";
-import {TalentTraitData} from "./trait";
+import {SkillOfTalentData} from "./skill";
+import {TraitOfTalentData} from "./trait";
+import {MonsterWithTalentData} from "./monster";
 
 export interface TalentData {
     name: string
     slug: string
     id: number
-    isInherent: boolean
-    skills: TalentSkillData[]
-    traits: TalentTraitData[]
+    skills: SkillOfTalentData[]
+    traits: TraitOfTalentData[]
+}
+
+export interface TalentOfMonsterData {
+    name: string
+    slug: string
+    id: number
+    isInnate: boolean
+    skills: SkillOfTalentData[]
+    traits: TraitOfTalentData[]
 }

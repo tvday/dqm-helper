@@ -3,6 +3,7 @@ import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faStar} from "@fortawesome/free-solid-svg-icons";
 import {GrowthRateData} from "../../interfaces/growthRate";
+import {AccordionBody, AccordionHeader} from "../Accordion";
 
 interface GrowthRateCardProps {
     growthRate: GrowthRateData
@@ -30,15 +31,21 @@ interface GrowthRatesProps {
 }
 
 const GrowthRates = ({growthRates}: GrowthRatesProps) => {
+    const id = 'GrowthRatesPanel';
+
     return (
-        <div className='container'>
-            <div className='h3'>Growth Rates</div>
-            {growthRates
-                ? <div className='row row-cols-3 g-3'>
-                    {growthRates.map((gr, index) => <GrowthRateCard growthRate={gr} key={index}/>)}
-                </div>
-                : <div>Error Loading Growth Rates...</div>
-            }
+        <div className='accordion-item'>
+            <AccordionHeader id={id}>
+                <div className='h3'>Growth Rates</div>
+            </AccordionHeader>
+            <AccordionBody id={id}>
+                {growthRates
+                    ? <div className='row row-cols-3 g-3'>
+                        {growthRates.map((gr, index) => <GrowthRateCard growthRate={gr} key={index}/>)}
+                    </div>
+                    : <div>Error Loading Growth Rates...</div>
+                }
+            </AccordionBody>
         </div>
     );
 };
