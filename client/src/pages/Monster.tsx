@@ -12,6 +12,10 @@ import Resistances from "../components/monster/Resistances";
 import Traits from "../components/monster/Traits";
 import Talents from "../components/monster/Talents";
 import Locations from "../components/monster/Locations";
+import Synths from "../components/monster/Synths";
+import SynthNode from "../components/synth/SynthNode";
+import {AccordionBody, AccordionHeader} from "../components/Accordion";
+import SynthTree from "../components/synth/SynthTree";
 
 const Monster = () => {
     const [data, setData] = useState<MonsterData | null>(null);
@@ -45,6 +49,19 @@ const Monster = () => {
                         <br/>
                         <Locations locations={data.locations}/>
                         <br/>
+                        {/*<div className='accordion-item'>*/}
+                        {/*    <AccordionHeader id={'id'}>*/}
+                        {/*        <div className='h3'>*/}
+                        {/*            Synth Node*/}
+                        {/*        </div>*/}
+                        {/*    </AccordionHeader>*/}
+                        {/*    <AccordionBody id={'id'}>*/}
+                        {/*        <SynthNode monster={data}/>*/}
+                        {/*        /!*<SynthTree/>*!/*/}
+                        {/*    </AccordionBody>*/}
+                        {/*</div>*/}
+                        <br/>
+                        <Synths monster={data}/>
                     </div>
                 </div>
             }
