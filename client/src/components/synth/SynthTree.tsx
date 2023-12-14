@@ -1,155 +1,81 @@
-import Tree, {CustomNodeElementProps, RawNodeDatum, TreeNodeDatum} from 'react-d3-tree';
-import SynthNode from "./SynthNode";
+import Tree, {CustomNodeElementProps} from 'react-d3-tree';
+import MonsterNode from "./MonsterNode";
 import {MonsterSimpleData} from "../../interfaces/monster";
-import assert from "assert";
-import {type} from "os";
+import {SynthNodeDatum, SynthTreeNodeDatum, NodeDimensionProps, SharedNodeProps} from "./interfaces";
+import {useEffect, useState} from "react";
+import {fetchSetData} from "../../utils/api";
+import {MonsterParentsData} from "../../interfaces/synth";
+import SynthComboNode from "./SynthComboNode";
+import {convertToNodes} from "./utils";
+import FamilyNode from "./FamilyNode";
 
-const dataTest1: RawNodeDatum = {
-    name: 'CEO',
-    children: [
-        {
-            name: 'Manager',
-            attributes: {
-                department: 'Production',
-            },
-            children: [
-                {
-                    name: 'Foreman',
-                    attributes: {
-                        department: 'Fabrication',
-                    },
-                    children: [
-                        {
-                            name: 'Worker',
-                        },
-                    ],
-                },
-                {
-                    name: 'Foreman',
-                    attributes: {
-                        department: 'Assembly',
-                    },
-                    children: [
-                        {
-                            name: 'Worker',
-                        },
-                    ],
-                },
-                {
-                    name: 'Foreman',
-                    attributes: {
-                        department: 'Fabrication',
-                    },
-                    children: [
-                        {
-                            name: 'Worker',
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
-}
-
-interface CustomNodeDatum extends RawNodeDatum {
-    monster: MonsterSimpleData
-    children?: CustomNodeDatum[]
-}
-
-interface CustomTreeNodeDatum extends TreeNodeDatum {
-    monster: MonsterSimpleData
-}
-
-const dataTest2: CustomNodeDatum = {
-    name: 'monsterName',
-    monster: {
-        name: "Slime",
-        id: 1,
-        slug: "slime",
-        monsterNo: 1,
-        family: "Slime",
-        familyImageSlug: "slime.png",
-        rank: "G",
-        imgURL: '',
-    },
-    children: [
-        {
-            name: 'monsterName',
-            monster: {
-                name: "Slime2",
-                id: 1,
-                slug: "slime",
-                monsterNo: 1,
-                family: "Slime",
-                familyImageSlug: "slime.png",
-                rank: "G",
-                imgURL: '',
-            }
-        },
-        {
-            name: 'monsterName',
-            monster: {
-                name: "Slime3",
-                id: 1,
-                slug: "slime",
-                monsterNo: 1,
-                family: "Slime",
-                familyImageSlug: "slime.png",
-                rank: "G",
-                imgURL: '',
-            }
-        },
-    ]
-}
-
-interface NodeDimensionProps {
-    width: number
-    height: number
-    // for translation
-    x: number
-    // for translation
-    y: number
-}
-
-const renderNode = (nodeProps: CustomNodeElementProps,
+const renderNode = ({nodeDatum, toggleNode, addChildren, hierarchyPointNode}: CustomNodeElementProps,
                     nodeDems: NodeDimensionProps) => {
-    const nodeDatum = nodeProps.nodeDatum as CustomTreeNodeDatum
-    const {toggleNode} = nodeProps
+    const content = (nodeDatum as SynthTreeNodeDatum).content
+    const sharedNodeProps: SharedNodeProps = {
+        collapsed: nodeDatum.__rd3t.collapsed,
+        leafNode: !(nodeDatum.children && nodeDatum.children.length > 0),
+        children: nodeDatum.children ? nodeDatum.children as SynthTreeNodeDatum[] : Array<SynthTreeNodeDatum>(),
+        toggleNode: toggleNode,
+        addChildren: addChildren,
+    }
+
     return (
         <g>
-            {/*<circle r={15}></circle>*/}
             {/* `foreignObject` requires width & height to be explicitly set. */}
             <foreignObject {...nodeDems} style={nodeDems}>
-                <SynthNode monster={nodeDatum.monster} onClick={toggleNode} expanded={nodeDatum.__rd3t.collapsed}/>
+                {content.monster ? <MonsterNode monster={content.monster}
+                                                       nodeProps={sharedNodeProps}/>
+                    : content.family ? <FamilyNode nodeProps={sharedNodeProps} family={content.family}/>
+                        : content.synthCombo ? <SynthComboNode nodeProps={sharedNodeProps} parentExpanded={!hierarchyPointNode.parent?.data.__rd3t.collapsed}/>
+                            : content.location ? <div>loc</div>
+                                : <></>
+                }
             </foreignObject>
         </g>
     );
 };
 
-interface SynthTreeProps {
 
-}
-
-const widthHeightRatio = 1.3;
 const width = 100
+const height = 182
 const nodeProps: NodeDimensionProps = {
     width: width,
-    height: 200,
+    height: height,
     x: width / -2,
-    y: -1 * width * widthHeightRatio
+    // y: 0
+    y: height / -2
 }
 
-const SynthTree = () => {
+interface SynthTreeProps {
+    monster: MonsterSimpleData
+}
+
+const SynthTree = ({monster}: SynthTreeProps) => {
+    const [data, setData] = useState<SynthNodeDatum>({
+        name: monster.slug,
+        content: {monster: monster}
+    })
+    const [parentData, setParentData] = useState<MonsterParentsData[]>([])
+
+    useEffect(() => {
+        fetchSetData(`/monsters/${monster.slug}/parents`, [], setParentData)
+    }, []);
+    useEffect(() => {
+        setData({name: data.name, content: data.content, children: convertToNodes(parentData)})
+    }, [parentData]);
+
     return (
         <div style={{width: '100%', height: '50rem', background: 'lightcoral'}} className='justify-content-center'>
             <Tree
-                data={dataTest2}
+                data={data}
                 pathFunc='step'
                 orientation='vertical'
                 renderCustomNodeElement={(rd3tNodeProps) => renderNode(rd3tNodeProps, nodeProps)}
                 draggable={true}
                 zoomable={false}
-                nodeSize={{x: nodeProps.width * 1.5, y: nodeProps.height * 1.5}}
+                nodeSize={{x: nodeProps.width + 10, y: nodeProps.height + 10}}
+                translate={{x: 550, y: 200}}
             />
         </div>
     );

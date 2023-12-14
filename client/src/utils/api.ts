@@ -16,10 +16,10 @@ export const IconsAPI = 'http://10.00.54:8080/icons'
  * @param setLoading {React.Dispatch<React.SetStateAction<boolean>>} function to set loading
  * @param setError {React.Dispatch<React.SetStateAction<string | null>>} function to set errors
  */
-export const fetchData = <T, D>(route: string, defaultVal: D,
-                                setData: React.Dispatch<React.SetStateAction<T | D>>,
-                                setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-                                setError: React.Dispatch<React.SetStateAction<string | null>>) => {
+export const fetchSetData = <T, D>(route: string, defaultVal: D,
+                                   setData: React.Dispatch<React.SetStateAction<T | D>>,
+                                   setLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+                                   setError?: React.Dispatch<React.SetStateAction<string | null>>) => {
 
     fetch(APIBase + route)
         .then((response) => {
@@ -30,14 +30,34 @@ export const fetchData = <T, D>(route: string, defaultVal: D,
         })
         .then((resData) => {
             setData(resData);
-            setError(null);
+            setError && setError(null);
         })
         .catch((err) => {
             console.log(err.message);
-            setError(err.message);
+            setError && setError(err.message);
             setData(defaultVal);
         })
         .finally(() => {
-            setLoading(false);
+            setLoading && setLoading(false);
         });
+}
+
+/**
+ * Fetch data from the API and update state using the given functions.
+ * @template T
+ * @template D
+ * @param route {string} route to API endpoint
+ * @param defaultVal {D} value to be used if data is not retrieved
+ * @param setData {React.Dispatch<React.SetStateAction<T | D>>} function to set data
+ * @param setLoading {React.Dispatch<React.SetStateAction<boolean>>} function to set loading
+ * @param setError {React.Dispatch<React.SetStateAction<string | null>>} function to set errors
+ */
+export const fetchData = async (route: string) => {
+    return fetch(APIBase + route)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`error status: ${response.status}`);
+            }
+            return response.json();
+        })
 }

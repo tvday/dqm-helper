@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {MonsterData, MonsterSimpleData} from "../interfaces/monster";
-import {APIBase, fetchData} from "../utils/api";
+import {APIBase, fetchSetData} from "../utils/api";
 import Table, {Column} from "../components/table/Table";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -13,7 +13,7 @@ import Traits from "../components/monster/Traits";
 import Talents from "../components/monster/Talents";
 import Locations from "../components/monster/Locations";
 import Synths from "../components/monster/Synths";
-import SynthNode from "../components/synth/SynthNode";
+import MonsterNode from "../components/synth/MonsterNode";
 import {AccordionBody, AccordionHeader} from "../components/Accordion";
 import SynthTree from "../components/synth/SynthTree";
 
@@ -28,7 +28,7 @@ const Monster = () => {
     }
 
     useEffect(() => {
-        fetchData(`/monsters/${slug}`, null, setData, setLoading, setError)
+        fetchSetData(`/monsters/${slug}`, null, setData, setLoading, setError)
     }, []);
 
     return (

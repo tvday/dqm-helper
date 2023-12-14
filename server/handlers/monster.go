@@ -43,7 +43,14 @@ func getParentsOfMonster(s listing.Service) func(c *gin.Context) {
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, monsters)
+		if len(monsters) == 0 {
+			// want to return an empty JSON array rather than null
+			c.IndentedJSON(http.StatusOK, make([]string, 0))
+			return
+		} else {
+			c.IndentedJSON(http.StatusOK, monsters)
+			return
+		}
 	}
 }
 

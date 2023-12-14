@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {MonsterSimpleData} from "../interfaces/monster";
-import {fetchData, IconsAPI} from "../utils/api";
+import {fetchSetData, IconsAPI} from "../utils/api";
 import MonsterTable from "../components/MonsterTable";
 
 const Monsters = () => {
@@ -9,7 +9,7 @@ const Monsters = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchData('/monsters', [], setData, setLoading, setError)
+        fetchSetData('/monsters', [], setData, setLoading, setError)
     }, []);
 
     return (

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {fetchData} from "../utils/api";
+import {fetchSetData} from "../utils/api";
 import {TalentData} from "../interfaces/talent";
 import {default as TalentTable} from '../components/TalentTable'
 import {MonsterWithTalentData} from "../interfaces/monster";
@@ -22,8 +22,8 @@ const Talent = () => {
     }
 
     useEffect(() => {
-        fetchData(`/talents/${slug}`, null, setTalentData, setTalentLoading, setTalentError);
-        fetchData(`/talents/${slug}/monsters`, null, setMonsterData, setMonsterLoading, setMonsterError)
+        fetchSetData(`/talents/${slug}`, null, setTalentData, setTalentLoading, setTalentError);
+        fetchSetData(`/talents/${slug}/monsters`, null, setMonsterData, setMonsterLoading, setMonsterError)
     }, []);
 
     return (

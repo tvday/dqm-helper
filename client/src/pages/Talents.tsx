@@ -1,7 +1,7 @@
 import Table, {Column} from "../components/table/Table";
 import {TalentOfMonsterData} from "../interfaces/talent";
 import React, {useEffect, useState} from "react";
-import {fetchData} from "../utils/api";
+import {fetchSetData} from "../utils/api";
 import {SkillOfTalentData} from "../interfaces/skill";
 import {TraitData} from "../interfaces/trait";
 import TalentTable from "../components/TalentTable";
@@ -62,7 +62,7 @@ const Talents = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchData('/talents', [], setData, setLoading, setError)
+        fetchSetData('/talents', [], setData, setLoading, setError)
     }, []);
 
     return (

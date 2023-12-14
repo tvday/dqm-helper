@@ -1,12 +1,12 @@
 import {MonsterSimpleData} from "./monster";
 
-interface MonsterSynthData extends MonsterSimpleData {
-    synths: MonsterSynthData
-}
+// interface SynthMonsterData extends MonsterSimpleData {
+//     parents: SynthMonsterData
+// }
 
-export interface SynthData {
-    parent1?: MonsterSynthData
-    parent2?: MonsterSynthData
+export interface MonsterParentsData {
+    parent1?: MonsterSimpleData
+    parent2?: MonsterSimpleData
 
     parent1Family?: { name: string, imageSlug: string }
     parent2Family?: { name: string, imageSlug: string }
