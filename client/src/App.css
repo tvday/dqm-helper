@@ -1,5 +1,6 @@
 .show-hide-button {
-    transition: none !important; transition-delay: 0s;
+    transition: none !important;
+    transition-delay: 0s;
 }
 
 .accordion {
@@ -202,12 +203,15 @@ Table
 .table th.up {
     background-image: url("./images/up_arrow.png");
 }
+
 .table th.down {
     background-image: url("./images/down_arrow.png");
 }
+
 .table th.default {
     background-image: url("./images/default.png");
 }
+
 th.up,
 th.default,
 th.down {
@@ -241,24 +245,23 @@ th.sortable {
 
 
 .tree {
+    --tree-branch-height: 2rem;
+    --tree-branch-width: .5rem;
+    --tree-branch-color: violet;
+    --tree-node-spacing: 2rem;
+    --tree-node-content-height: 100%;
 
 }
 
-.tree-row {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-flow: row wrap;
-}
-
-.node {
+.tree-node {
     display: flex;
     flex-direction: column;
 
     height: 100%;
-    /*width: 100%;*/
-    margin-left: 2rem;
-    margin-right: 2rem;
+    width: min-content;
+    margin-left: var(--tree-node-spacing);
+    margin-right: var(--tree-node-spacing);
+    padding-top: var(--tree-branch-height);
 
     align-items: center;
     /*align-content: center;*/
@@ -267,35 +270,103 @@ th.sortable {
     position: relative;
 }
 
-.node-children {
+.tree-node-content {
+    /*margin-left: 2rem;*/
+    /*margin-right: 2rem;*/
+    width: min-content;
+    height: var(--tree-node-content-height);
+}
+
+.tree-node-children {
     display: flex;
     flex-direction: row;
 
-    margin-left: 2rem;
-    margin-right: 2rem;
     width: 100%;
     height: 100%;
 
+    padding-top: var(--tree-branch-height);
+
+    position: relative;
     align-items: start;
     justify-content: center;
 }
 
-.node-content {
-    margin-left: 2rem;
-    margin-right: 2rem;
-    width: min-content;
+
+/* v---v Tree Branch Lines v---v */
+
+/* all lines */
+.tree-node-children::before,
+.tree-node-content::before,
+.tree-node-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    border-color: var(--tree-branch-color);
+
+    /*border-color: brown;*/
+    /*border-style: solid;*/
 }
 
-.branch-h-line{
-    position: absolute;
-    width: 25%;
+/* vertical lines */
+.tree-node-children::before,
+.tree-node-content::before,
+.tree-node-content::after {
+    height: var(--tree-branch-height);
 }
 
-.branch-v-line{
-    position: absolute;
-    align-self: center;
-    justify-self: center;
-    /*justify-self: unsafe end;*/
-    top: 4.5rem;
-    height: 1.5rem;
+/* horizontal lines */
+.tree-node-content::before,
+.tree-node-content::after {
+    /* length of line, meets in middle of parent node */
+    width: calc(50% + var(--tree-node-spacing));
 }
+
+/* from node down towards children */
+.tree-node-children::before {
+    border-right: calc(var(--tree-branch-width) / 2) solid;
+    border-left: calc(var(--tree-branch-width) / 2) solid;
+    background: var(--tree-branch-color);
+
+    width: calc(var(--tree-branch-width));
+}
+
+/* from node, up and left towards parent or siblings */
+.tree-node-content::before {
+    right: 50%;
+
+    border-top: var(--tree-branch-width) solid;
+    border-right: calc(var(--tree-branch-width) / 2) solid;
+
+    height: var(--tree-branch-height);
+}
+.tree-node-left > .tree-node-content::before {
+    /* node on left edge only needs vertical line */
+    border-top: unset;
+    border-right: calc(var(--tree-branch-width) / 2) solid;
+    width: calc(var(--tree-branch-width) / 2);
+}
+
+/* from node, up and right towards parent or siblings */
+.tree-node-content::after {
+    left: 50%;
+    border-top: var(--tree-branch-width) solid;
+    border-left: calc(var(--tree-branch-width) / 2) solid;
+}
+.tree-node-right > .tree-node-content::after {
+    /* node on right edge only needs vertical line */
+    border-top: unset;
+    border-left: calc(var(--tree-branch-width) / 2) solid;
+    width: calc(var(--tree-branch-width) / 2);
+}
+
+/* root node doesn't have parents */
+.tree-node-root > .tree-node-content::after,
+.tree-node-root > .tree-node-content::before {
+    content: unset;
+}
+
+/* ^---^ Tree Branch Lines ^---^ */
+
+
+
+
