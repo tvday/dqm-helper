@@ -13,9 +13,6 @@ import Traits from "../components/monster/Traits";
 import Talents from "../components/monster/Talents";
 import Locations from "../components/monster/Locations";
 import Synths from "../components/monster/Synths";
-import MonsterNode from "../components/synth/MonsterNode";
-import {AccordionBody, AccordionHeader} from "../components/Accordion";
-import SynthTree from "../components/synth/SynthTree";
 
 const Monster = () => {
     const [data, setData] = useState<MonsterData | null>(null);

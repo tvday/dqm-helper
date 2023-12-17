@@ -1,6 +1,6 @@
 import {MonsterSimpleData} from "../../interfaces/monster";
 import {AccordionBody, AccordionHeader} from "../Accordion";
-import SynthTree from "../synth/SynthTree";
+import SynthTree from "../synthTree/SynthTree";
 
 interface SynthsProps {
     // synths: SynthData[]
@@ -18,7 +18,7 @@ const Synths = ({monster}: SynthsProps) => {
             </AccordionHeader>
             <AccordionBody id={id}>
                 {/*<SynthNode monster={monster}/>*/}
-                <SynthTree monster={monster}/>
+                <SynthTree rootMonster={monster}/>
             </AccordionBody>
         </div>
     );

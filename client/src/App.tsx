@@ -10,8 +10,19 @@ import Home from "./pages/Home";
 import Monster from "./pages/Monster";
 import Talents from "./pages/Talents";
 import Talent from "./pages/Talent";
-import Tree from "./components/tree/Tree";
-// import Table from "./components/Table";
+import SynthTree from "./components/synthTree/SynthTree";
+import {MonsterSimpleData} from "./interfaces/monster";
+
+const monster: MonsterSimpleData = {
+    name: "Lieutenant Goreham-Hogg",
+    id: 420,
+    slug: "lieutenant-goreham-hogg",
+    monsterNo: 420,
+    family: "Demon",
+    familyImageSlug: "demon.png",
+    rank: "A",
+    imgURL: ''
+}
 
 function App() {
   return (
@@ -27,7 +38,7 @@ function App() {
                       <Route path="talents" element={<Talents/>}/>
                       <Route path="talents/:slug" element={<Talent/>}/>
                       <Route path="contact" element={<Contact/>}/>
-                      <Route path="tree" element={<Tree/>}/>
+                      <Route path="tree" element={<SynthTree rootMonster={monster}/>}/>
                       <Route path="*" element={<NoPage/>}/>
                   </Route>
               </Routes>
