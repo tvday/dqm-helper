@@ -47,12 +47,9 @@ export const fetchSetData = <T, D>(route: string, defaultVal: D,
  * @template T
  * @template D
  * @param route {string} route to API endpoint
- * @param defaultVal {D} value to be used if data is not retrieved
- * @param setData {React.Dispatch<React.SetStateAction<T | D>>} function to set data
- * @param setLoading {React.Dispatch<React.SetStateAction<boolean>>} function to set loading
- * @param setError {React.Dispatch<React.SetStateAction<string | null>>} function to set errors
+ * @return promise from fetch call
  */
-export const fetchData = async (route: string) => {
+export const fetchData = async (route: string): Promise<any> => {
     return fetch(APIBase + route)
         .then((response) => {
             if (!response.ok) {

@@ -8,8 +8,11 @@ export interface MonsterParentsData {
     parent1?: MonsterSimpleData
     parent2?: MonsterSimpleData
 
+    parent3?: MonsterSimpleData
+    parent4?: MonsterSimpleData
+
     parent1Family?: { name: string, imageSlug: string }
     parent2Family?: { name: string, imageSlug: string }
 
-    ParentRank?: { name: string }
+    parentRank?: { name: string }
 }

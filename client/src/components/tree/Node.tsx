@@ -17,7 +17,7 @@ const Node = <T, >({data, renderNode, isRoot, isRightEdge, isLeftEdge}: NodeProp
     const [children, setChildren] = useState<NodeData<T>[]>(data.children);
 
     const toggleNode = () => setIsExpanded(!isExpanded);
-    const addChildren = (data: NodeData<T>[]) => setChildren(children.concat(data));
+    const addChildren = (data: NodeData<T>[]) => setChildren(data.concat(children));
 
     return (
         <div className={`tree-node 

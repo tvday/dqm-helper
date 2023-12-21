@@ -15,7 +15,7 @@ export const convertToNodes = (data: MonsterParentsData[]): SynthNodeDatum[] => 
             child.children?.push({
                 name: value.parent1Family.name,
                 children: [],
-                content: {family: value.parent1Family, rank: value.ParentRank?.name}
+                content: {family: value.parent1Family, rank: value.parentRank?.name}
             })
         }
 
@@ -29,7 +29,7 @@ export const convertToNodes = (data: MonsterParentsData[]): SynthNodeDatum[] => 
             child.children?.push({
                 name: value.parent2Family.name,
                 children: [],
-                content: {family: value.parent2Family, rank: value.ParentRank?.name}
+                content: {family: value.parent2Family, rank: value.parentRank?.name}
             })
         }
 

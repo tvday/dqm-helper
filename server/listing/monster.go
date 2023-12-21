@@ -13,8 +13,8 @@ type MonsterOutput struct {
 	Resistances []ResistanceOutput    `json:"resistances,omitempty"`
 	Traits      []MonsterTraitOutput  `json:"traits,omitempty"`
 	Talents     []MonsterTalentOutput `json:"talents,omitempty"`
-	Locations   []LocationOutput      `json:"locations"`
-	ImageURL    *string               `json:"image,omitempty"`
+	//Locations   []LocationOutput      `json:"locations"`
+	ImageURL *string `json:"image,omitempty"`
 }
 
 type MonsterQueryTalentOutput struct {
@@ -53,7 +53,7 @@ func (s *Service) GetMonstersWithTalent(talent models.Talent) ([]MonsterQueryTal
 		}
 
 		var err error
-		monster.Locations, err = s.GetLocationOfMonster(monster.ID)
+		monster.Locations, err = s.GetLocationsOfMonster(models.Monster{ID: monster.ID})
 		if err != nil {
 			return nil, err
 		}
@@ -157,10 +157,10 @@ func (s *Service) getMonsterData(simple bool, data ...models.Monster) ([]Monster
 				return nil, err
 			}
 
-			m.Locations, err = s.GetLocationOfMonster(m.ID)
-			if err != nil {
-				return nil, err
-			}
+			//m.Locations, err = s.GetLocationsOfMonster(models.Monster{ID: m.ID})
+			//if err != nil {
+			//	return nil, err
+			//}
 		}
 
 		monsters = append(monsters, m)

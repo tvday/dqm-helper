@@ -1,11 +1,11 @@
-import React from "react";
 import {SharedNodeProps} from "./SynthTree";
+import React from "react";
 
-interface SynthComboNodeProps {
+interface LocationGroupNodeProps {
     nodeProps: SharedNodeProps
 }
 
-const SynthComboNode = ({nodeProps}: SynthComboNodeProps) => {
+const LocationGroupNode = ({nodeProps}: LocationGroupNodeProps) => {
     const {toggleNode} = nodeProps
 
     return (
@@ -13,12 +13,12 @@ const SynthComboNode = ({nodeProps}: SynthComboNodeProps) => {
             <div className=''>
                 <button className='synth-node-btn'
                         onClick={toggleNode}
-                    >
-                    Synth Combo
+                >
+                    Locations
                 </button>
             </div>
         </div>
     );
 };
 
-export default SynthComboNode;
+export default LocationGroupNode;

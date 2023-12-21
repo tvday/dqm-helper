@@ -54,6 +54,26 @@ func getParentsOfMonster(s listing.Service) func(c *gin.Context) {
 	}
 }
 
+func getLocationsOfMonster(s listing.Service) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		monsters, err := s.GetLocationsOfMonster(models.Monster{Slug: c.Param("slug")})
+
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if len(monsters) == 0 {
+			// want to return an empty JSON array rather than null
+			c.IndentedJSON(http.StatusOK, make([]string, 0))
+			return
+		} else {
+			c.IndentedJSON(http.StatusOK, monsters)
+			return
+		}
+	}
+}
+
 func addMonster(a adding.Service) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var input adding.MonsterInput

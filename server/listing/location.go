@@ -3,6 +3,7 @@ package listing
 import (
 	"encoding/json"
 	"github.com/tvday/dqm-helper/server/models"
+	"github.com/tvday/dqm-helper/server/util"
 )
 
 type LocationOutput struct {
@@ -11,8 +12,8 @@ type LocationOutput struct {
 	Seasons []models.Season `json:"seasons,omitempty"`
 }
 
-func (s *Service) GetLocationOfMonster(monsterID int) ([]LocationOutput, error) {
-	rows, err := s.db.Query(`
+func (s *Service) GetLocationsOfMonster(monster models.Monster) ([]LocationOutput, error) {
+	query := util.NewQuery(`
 		SELECT 	l.location_id,
 				l.name,
 				l.sub_name,
@@ -23,12 +24,15 @@ func (s *Service) GetLocationOfMonster(monsterID int) ([]LocationOutput, error) 
                        	'imageSlug', s.image_slug
                		) ORDER BY s.season_id
        			) AS seasons
-		FROM monster_location_season mls
+		FROM monster m
+			JOIN monster_location_season mls ON m.monster_id = mls.monster_id
          	JOIN location l ON mls.location_id = l.location_id
-         	JOIN season s ON mls.season_id = s.season_id
-		WHERE monster_id = $1
-		GROUP BY l.location_id;`,
-		monsterID)
+         	JOIN season s ON mls.season_id = s.season_id`).
+		GroupBy("GROUP BY l.location_id")
+
+	query, err := extractMonsterPredicates(query, monster)
+
+	rows, err := s.db.Query(query.Build(), query.GetArgs()...)
 	if err != nil {
 		return nil, err
 	}

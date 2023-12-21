@@ -7,6 +7,7 @@ type Query struct {
 	whereClauses   string
 	args           []interface{}
 	orderByClauses string
+	groupByClause  string
 	err            error
 }
 
@@ -39,6 +40,13 @@ func (q *Query) OrderBy(col string) *Query {
 	return q
 }
 
+// GroupBy adds a GROUP BY clause to the query. Overwrites any previous GROUP BY clause.
+func (q *Query) GroupBy(clause string) *Query {
+	q.groupByClause = clause
+
+	return q
+}
+
 // Build returns a completed query with search parameter placeholders in place.
 func (q *Query) Build() string {
 	stmt := q.baseQuery
@@ -47,6 +55,9 @@ func (q *Query) Build() string {
 	}
 	if q.orderByClauses != "" {
 		stmt += "\n" + q.orderByClauses
+	}
+	if q.groupByClause != "" {
+		stmt += "\n" + q.groupByClause
 	}
 
 	return stmt + ";"

@@ -44,7 +44,7 @@ const Monster = () => {
                         <br/>
                         <Talents talents={data.talents}/>
                         <br/>
-                        <Locations locations={data.locations}/>
+                        <Locations monsterSlug={data.slug}/>
                         <br/>
                         {/*<div className='accordion-item'>*/}
                         {/*    <AccordionHeader id={'id'}>*/}
